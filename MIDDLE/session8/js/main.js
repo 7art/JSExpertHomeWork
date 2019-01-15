@@ -33,21 +33,21 @@ function transform() {
   };
 
   //получаем один объект из массива и преобразоваем его поля по заданным правилам
-  let newArray = newData.map(function(arrObject) {
+  let convertArray = newData.map(function(arrObject) {
     return {
       url: "http://" + arrObject.url,
       name: capitalize(arrObject.name),
       params: `${arrObject.params.status}=>${arrObject.params.progress}`,
       isVisible: arrObject.params.status,
       desc: cutString(arrObject.description),
-      //date = newDate(arrObject.date)
-      date: moment(arrObject.date).format("YYYY/MM/DD hh:mm")
+      date = newDate(arrObject.date)
+      //date: moment(arrObject.date).format("YYYY/MM/DD hh:mm")
     };
   });
 
   //filter, выбираем только те элементы у которых isVisible == true
-  let filteredArr = newArray.filter(arrObject => {
-    return arrObject.isVisible == true;
+  let filteredArr = convertArray.filter(arrObject => {
+    return arrObject.isVisible === true;
   });
 
   printResult(4);
