@@ -129,19 +129,10 @@
     });
 
     //обрезаем результирующий массив
-    switch (Number(lineSelector.value)) {
-      case 0:
-        sliceData = newData;
-        break;
-      case 1:
-        sliceData = newData.slice(0, 3);
-        break;
-      case 2:
-        sliceData = newData.slice(0, 6);
-        break;
-      default:
-        break;
-    }
+    sliceData =
+      Number(lineSelector.value) > 0
+        ? newData.slice(0, lineSelector.value * 3)
+        : newData;
 
     //показываем галерею
     switch (Number(typeSelector.value)) {
