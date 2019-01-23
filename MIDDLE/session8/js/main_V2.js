@@ -2,26 +2,27 @@
 var btn = document.getElementById("play");
 let copyData = [...data];
 let delField = "id";
+let numObjInPrintResult = 4;
 
 //удаляем 6-й элемент массива
-let deleteSixthEl = item => {
-  return item.id !== 6;
+let deleteSixthEl = (item, itemNum) => {
+  return itemNum !== 5;
 };
 
 //удаляем id из масива
 let deleteIdFromData = item => {
   let keyArr = Object.keys(item);
-  let newArr = {};
+  let newObj = {};
   keyArr.forEach(key => {
     if (key !== delField) {
-      newArr[key] = item[key];
+      newObj[key] = item[key];
     }
   });
-  return newArr;
+  return newObj;
 };
 
 //получаем один объект из массива и преобразоваем его поля по заданным правилам
-let convertArray = item => {
+let convertArr = item => {
   return {
     url: addHttp(item.url),
     name: capitalize(item.name),
@@ -32,12 +33,8 @@ let convertArray = item => {
   };
 };
 
-//filter, выбираем только те элементы у которых isVisible == true
-let filteredArr = copyData
-  .filter(deleteSixthEl)
-  .map(deleteIdFromData)
-  .map(convertArray)
-  .filter(item => item.isVisible);
+//выбираем только те элементы у которых isVisible == true
+let filteredArr = item => item.isVisible;
 
 //добавляем http
 function addHttp(str) {
@@ -55,19 +52,30 @@ function cutString(str) {
 }
 
 //полученный результат печатаем в консоль.
-function printResult(count = filteredArr.length) {
+function printResult(arr, count) {
+  if (count > arr.length) {
+    count = arr.length;
+  }
   let newArr = [];
   for (let i = 0; i < count; i++) {
-    newArr.push(filteredArr[i]);
+    newArr.push(arr[i]);
   }
   console.table(newArr);
   //console.log(newArr);
 }
 
 function transform() {
-  //Полученный результат печатаем в консоль,количество элементов в результате 
+
+  //преобразовываем массив объектов
+  let resultArr = copyData
+    .filter(deleteSixthEl)
+    .map(deleteIdFromData)
+    .map(convertArr)
+    .filter(filteredArr);
+
+  //Полученный результат печатаем в консоль, количество элементов в результате
   //должно быть не два а сколько укажете в переменной
-  printResult(3);
+  printResult(resultArr, numObjInPrintResult);
 }
 
 btn.addEventListener("click", transform);

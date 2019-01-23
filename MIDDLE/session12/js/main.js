@@ -10,9 +10,12 @@
     secondGroup = document.querySelector(".second-group").classList,
     thirdGroup = document.querySelector(".third-group").classList;
 
-  //шаблон построения галлереи с помощю replace
-  let replaceItemTemplate =
-    '<div class="col-sm-3 col-xs-6">\
+  //метод replace
+  function showUsingReplase(array) {
+    let resultHTML = "";
+    //шаблон построения галлереи с помощю replace
+    const replaceItemTemplate =
+      '<div class="col-sm-3 col-xs-6">\
     <img src="$url" alt="$name" class="img-thumbnail">\
     <div class="info-wrapper">\
     <div class="text-muted">$name</div>\
@@ -20,10 +23,6 @@
     <div class="text-muted">$date</div>\
     </div>\
     </div>';
-
-  //метод replace
-  function showUsingReplase(array) {
-    let resultHTML = "";
     showOrHide(firstGroup, secondGroup, thirdGroup);
     array.forEach(item => {
       resultHTML += replaceItemTemplate
@@ -40,13 +39,13 @@
     let resultHTML = "";
     showOrHide(secondGroup, firstGroup, thirdGroup);
     array.forEach(item => {
-      resultHTML += `<div class="col-sm-3 col-xs-6">\
-        <img src="${item.url}" alt="${item.name}" class="img-thumbnail">\
-        <div class="info-wrapper">\
-            <div class="text-muted">${item.name}</div>\
-            <div class="text-muted top-padding">${item.description}</div>\
-            <div class="text-muted">${item.date}</div>\
-        </div>\
+      resultHTML += `<div class="col-sm-3 col-xs-6">
+        <img src="${item.url}" alt="${item.name}" class="img-thumbnail">
+        <div class="info-wrapper">
+            <div class="text-muted">${item.name}</div>
+            <div class="text-muted top-padding">${item.description}</div>
+            <div class="text-muted">${item.date}</div>
+        </div>
         </div>`;
     });
     secondBlock.innerHTML = resultHTML;
@@ -54,37 +53,43 @@
 
   //метод с использованием CreateElement
   function showUsingCreateElem(array) {
-    let divResult = "";
+    thirdBlock.innerHTML = "";
+    const fragment = document.createDocumentFragment();
     showOrHide(thirdGroup, firstGroup, secondGroup);
     array.forEach(item => {
-      let divInner = document.createElement("div");
       let divWrapper = document.createElement("div");
       divWrapper.className = "info-wrapper";
+
       let divMutedFirst = document.createElement("div");
       divMutedFirst.className = "text-muted";
       divMutedFirst.appendChild(document.createTextNode(`${item.name}`));
       divWrapper.appendChild(divMutedFirst);
+
       let divMutedSecond = divMutedFirst.cloneNode();
       divMutedSecond.classList.add("top-padding");
       divMutedSecond.appendChild(
         document.createTextNode(`${item.description}`)
       );
       divWrapper.appendChild(divMutedSecond);
+
       let divMutedThird = divMutedFirst.cloneNode();
       divMutedThird.appendChild(document.createTextNode(`${item.date}`));
       divWrapper.appendChild(divMutedThird);
-      let div = document.createElement("div");
-      div.className = "col-sm-3 col-xs-6";
+
       let img = document.createElement("img");
       img.setAttribute("src", `${item.url}`);
       img.setAttribute("alt", `${item.name}`);
       img.className = "img-thumbnail";
+
+      let div = document.createElement("div");
+      div.className = "col-sm-3 col-xs-6";
+
       div.appendChild(img);
       div.appendChild(divWrapper);
-      divInner.appendChild(div);
-      divResult += divInner.innerHTML;
+
+      fragment.appendChild(div);
     });
-    thirdBlock.innerHTML = divResult;
+    thirdBlock.appendChild(fragment);
   }
 
   //обрезаем строку

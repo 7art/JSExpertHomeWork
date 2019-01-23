@@ -38,6 +38,35 @@
 
 	<div class="site-wrapper">
 		<div class="container">
+			<div class="row text-center">
+				<div class="col-lg-4 col-md-4"></div>
+				<div class="col-lg-4 col-md-4">
+					<select id="type-selector" class="form-control">
+						<option default value="0">-Выберите один из вариантов-</option>
+						<option value="1">Использовать replace</option>
+						<option value="2">Использовать шаблонные строки</option>
+						<option value="3">Использовать createElement</option>
+					</select>
+					
+					
+				</div>
+				<div class="col-lg-4 col-md-4">
+						<select id="line-selector" class="form-control count-selector">
+								<option default value="0">Все</option>
+								<option value="1">Три картинки</option>
+								<option value="2">Шесть картинок</option>
+								</select>
+						<br><br>
+				</div>
+				
+			
+				<div class="col-lg-12 col-md-12">
+					<div class="btn btn-primary" id="play">Построить галлерею</div>
+					<br><br>
+				</div>
+			</div>
+
+
 			<div class="row text-center first-group hide">
 				<div class="col-md-12">
 					<h3>Галлерея построенная с помощью replace</h3>
@@ -63,35 +92,7 @@
 				<div class="col-md-12">
 					<div id="third-line"></div>
 				</div>
-			</div>
-
-            <div class="row text-center">
-                <div class="col-lg-4 col-md-4"></div>
-                <div class="col-lg-4 col-md-4">
-					<select id="type-selector" class="form-control">
-					  <option default value="0">-Выберите один из вариантов-</option>
-                      <option value="1">Использовать replace</option>
-                      <option value="2">Использовать шаблонные строки</option>
-					  <option value="3">Использовать createElement</option>
-					</select>
-					
-					
-                </div>
-                <div class="col-lg-4 col-md-4">
-						<select id="line-selector" class="form-control count-selector">
-								<option default value="0">Все</option>
-								<option value="1">Три картинки</option>
-								<option value="2">Шесть картинок</option>
-							  </select>
-						<br><br>
-				</div>
-             
-            
-				<div class="col-lg-12 col-md-12">
-					<div class="btn btn-primary" id="play">Построить галлерею</div>
-				    <br><br>
-				</div>
-			</div>
+			</div>            
 
 		</div>
 	</div>
