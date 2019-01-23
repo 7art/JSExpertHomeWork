@@ -14,7 +14,6 @@
   //метод replace
   function showUsingReplase(array) {
     let resultHTML = "";
-    //шаблон построения галлереи с помощю replace
     const replaceItemTemplate =
       '<div class="col-sm-3 col-xs-6">\
     <img src="$url" alt="$name" class="img-thumbnail">\
@@ -24,7 +23,7 @@
     <div class="text-muted">$date</div>\
     </div>\
     </div>';
-    showOrHide(firstGroup, secondGroup, thirdGroup);
+    showBlock(firstGroup);
     array.forEach(item => {
       resultHTML += replaceItemTemplate
         .replace(/\$name/gi, item.name)
@@ -38,7 +37,7 @@
   //метод с использованием шаблонных строк
   function showUsingStrTpl(array) {
     let resultHTML = "";
-    showOrHide(secondGroup, firstGroup, thirdGroup);
+    showBlock(secondGroup);
     array.forEach(item => {
       resultHTML += `<div class="col-sm-3 col-xs-6">
         <img src="${item.url}" alt="${item.name}" class="img-thumbnail">
@@ -56,7 +55,7 @@
   function showUsingCreateElem(array) {
     thirdBlock.innerHTML = "";
     const fragment = document.createDocumentFragment();
-    showOrHide(thirdGroup, firstGroup, secondGroup);
+    showBlock(thirdGroup);
     array.forEach(item => {
       let divWrapper = document.createElement("div");
       divWrapper.className = "info-wrapper";
@@ -108,63 +107,70 @@
     return moment(date).format("YYYY/MM/DD HH:mm");
   }
 
-  //прячем ненужные блоки
-  function showOrHide() {
-    arguments[0].remove("hide");
-    arguments[0].add("show");
-
-    arguments[1].remove("show");
-    arguments[1].add("hide");
-
-    arguments[2].remove("show");
-    arguments[2].add("hide");
+  //показываем ненужные блоки
+  function showBlock(block) {
+    block.remove("hide");
+    block.add("show");
   }
 
-  function init() {
-    let sliceData,
-      newData = [];
-    message.innerHTML = "";
+  //прячем ненужные блоки
+  function hideBlock(...blocks) {
+    blocks.forEach(item => {
+      item.remove("show");
+      item.add("hide");
+    });
+  }
 
-    //получаем результирующий массив объектов
-    data.forEach(function(item) {
-      newData.push({
+  //выводим сообщение 
+  function showMessage(block, message) {
+    block.innerHTML = message;
+    setTimeout(function() {
+      block.innerHTML = "";
+    }, 2500);
+  }
+
+  //получаем результирующий массив объектов
+  function prepareData(data) {
+    let limit;
+    if (+lineSelector.value) limit = lineSelector.value * 3;
+    if (limit) data = data.slice(0, limit);
+
+    return data.map(item => {
+      return {
         url: addHttp(item.url),
         name: item.name,
         description: cutString(item.description),
         date: formatDate(item.date)
-      });
+      };
     });
+  }
 
-    //обрезаем результирующий массив
-    sliceData =
-      Number(lineSelector.value) > 0
-        ? newData.slice(0, lineSelector.value * 3)
-        : newData;
+  function buildGallery() {
+    hideBlock(firstGroup, secondGroup, thirdGroup);
+    //message.innerHTML = "";
+    const galleryData = prepareData(data);
 
     //показываем галерею
-    switch (Number(typeSelector.value)) {
+    switch (+typeSelector.value) {
       case 1:
-        showUsingReplase(sliceData);
+        showUsingReplase(galleryData);
         break;
       case 2:
-        showUsingStrTpl(sliceData);
+        showUsingStrTpl(galleryData);
         break;
       case 3:
-        showUsingCreateElem(sliceData);
+        showUsingCreateElem(galleryData);
         break;
       case 0:
       default:
-        if (document.querySelector(".show")) {
-          const classList = document.querySelector(".show").classList;        
-
-          classList.remove("show");
-          classList.add("hide");         
-        }
-        message.innerHTML =
-        '<div class="alert alert-warning">Выберите один из вариантов отображения галереи!</div>';
+        showMessage(
+          message,
+          '<div class="alert alert-warning">Выберите один из вариантов отображения галереи!</div>'
+        );
+        //  setTimeout('alert(1)', 2000);
         break;
     }
   }
 
-  btn.addEventListener("click", init);
+  btn.addEventListener("click", buildGallery);
 })();
