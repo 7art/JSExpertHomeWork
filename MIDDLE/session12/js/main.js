@@ -107,7 +107,7 @@
     return moment(date).format("YYYY/MM/DD HH:mm");
   }
 
-  //показываем ненужные блоки
+  //показываем ненужный блок
   function showBlock(block) {
     block.remove("hide");
     block.add("show");
@@ -146,10 +146,8 @@
   }
 
   function buildGallery() {
-    hideBlock(firstGroup, secondGroup, thirdGroup);
-    //message.innerHTML = "";
     const galleryData = prepareData(data);
-
+    hideBlock(firstGroup, secondGroup, thirdGroup);
     //показываем галерею
     switch (+typeSelector.value) {
       case 1:
@@ -166,8 +164,7 @@
         showMessage(
           message,
           '<div class="alert alert-warning">Выберите один из вариантов отображения галереи!</div>'
-        );
-        //  setTimeout('alert(1)', 2000);
+        );        
         break;
     }
   }
