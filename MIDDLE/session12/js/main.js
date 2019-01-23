@@ -8,7 +8,8 @@
     lineSelector = document.getElementById("line-selector"),
     firstGroup = document.querySelector(".first-group").classList,
     secondGroup = document.querySelector(".second-group").classList,
-    thirdGroup = document.querySelector(".third-group").classList;
+    thirdGroup = document.querySelector(".third-group").classList,
+    message = document.querySelector(".message");
 
   //метод replace
   function showUsingReplase(array) {
@@ -122,6 +123,7 @@
   function init() {
     let sliceData,
       newData = [];
+    message.innerHTML = "";
 
     //получаем результирующий массив объектов
     data.forEach(function(item) {
@@ -153,10 +155,13 @@
       case 0:
       default:
         if (document.querySelector(".show")) {
-          const classList = document.querySelector(".show").classList;
+          const classList = document.querySelector(".show").classList;        
+
           classList.remove("show");
-          classList.add("hide");
+          classList.add("hide");         
         }
+        message.innerHTML =
+        '<div class="alert alert-warning">Выберите один из вариантов отображения галереи!</div>';
         break;
     }
   }
