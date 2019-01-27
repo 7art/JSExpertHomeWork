@@ -97,17 +97,18 @@
 
   //при нажатии на btn удаляем один элемент из массива displayedGalleryItems
   function removeOneItem(e) {
-   // console.log(e);
+    //console.log(e.target.parentElement.childNodes[1].src);
+    const targetNode = e.target.parentElement.childNodes[1].src; 
     // находим объєкт с помощью атрибута src в массиве displayedGalleryItems 
     let findItem = displayedGalleryItems.filter(item => {
-      return item.url === e.path[1].childNodes[1].src; 
+      return item.url === targetNode; 
     });
     // добавляєм его в массив hiddenGalleryItems
     hiddenGalleryItems = hiddenGalleryItems.concat(findItem); 
 
     //удаляем объєкт из массива displayedGalleryItems
     displayedGalleryItems = displayedGalleryItems.filter(item => {
-      return item.url !== e.path[1].childNodes[1].src;
+      return item.url !== targetNode;
     });
 
     buildGallery(displayedGalleryItems);
