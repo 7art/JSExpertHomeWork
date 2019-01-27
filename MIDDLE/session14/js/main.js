@@ -49,7 +49,7 @@
           <p>${item.description}</p\
           <p>${item.date}</p>
         </div>
-        <button class="btn btn-danger" >
+        <button class="btn btn-danger" id="${item.id}">
         Удалить
         </button>
       </div>
@@ -79,41 +79,41 @@
   //деактивируем/активируем кнопку
   function toggleButton(array) {
     if (data.length === array.length) {
-      btn.setAttribute("disabled", true);
+      btn.setAttribute("disabled", true); 
+      $(".bs-example-modal-sm").modal("show");
     } else {
       btn.removeAttribute("disabled");
     }
   }
 
   //при нажатии на btn показываем один элемент из массива hiddenGalleryItems
-  function showOneItem() {
-    //добавляем первый обьэкт из массива hiddenGalleryItems в массив displayedGalleryItems
+  function getOneItem() {
+    //вырезаем первый обьэкт из массива hiddenGalleryItems,
+    //вставляем его в массив displayedGalleryItems
     displayedGalleryItems = displayedGalleryItems.concat(
       hiddenGalleryItems.splice(0, 1)
     );
-
     buildGallery(displayedGalleryItems);
   }
 
-  //при нажатии на btn удаляем один элемент из массива displayedGalleryItems
+  //при нажатии на btn-danger удаляем один элемент из массива displayedGalleryItems
   function removeOneItem(e) {
-    //console.log(e.target.parentElement.childNodes[1].src);
-    const targetNode = e.target.parentElement.childNodes[1].src; 
-    // находим объєкт с помощью атрибута src в массиве displayedGalleryItems 
-    let findItem = displayedGalleryItems.filter(item => {
-      return item.url === targetNode; 
-    });
-    // добавляєм его в массив hiddenGalleryItems
-    hiddenGalleryItems = hiddenGalleryItems.concat(findItem); 
-
-    //удаляем объєкт из массива displayedGalleryItems
-    displayedGalleryItems = displayedGalleryItems.filter(item => {
-      return item.url !== targetNode;
-    });
-
-    buildGallery(displayedGalleryItems);
+    const itemId = +e.target.id; //id удаляемого объекта
+    if (itemId) {
+      // находим объект в массиве displayedGalleryItems
+      let findItem = displayedGalleryItems.filter(item => {
+        return item.id === itemId;
+      });
+      // добавляєм его в массив hiddenGalleryItems
+      hiddenGalleryItems = hiddenGalleryItems.concat(findItem);
+      //удаляем объєкт из массива displayedGalleryItems
+      displayedGalleryItems = displayedGalleryItems.filter(item => {
+        return item.id !== itemId;
+      });
+      buildGallery(displayedGalleryItems);
+    }
   }
 
   mainDiv.addEventListener("click", removeOneItem);
-  btn.addEventListener("click", showOneItem);
+  btn.addEventListener("click", getOneItem);
 })();
