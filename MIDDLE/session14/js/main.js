@@ -2,9 +2,8 @@
   "use strict";
   const btn = document.getElementById("play"),
     mainDiv = document.getElementById("mainGallery"),
-    typeSelector = document.getElementById("sort-type"),
-    counter = document.querySelector("#counter"),
-    message = document.querySelector(".message");
+    sortType = document.getElementById("sort-type"),
+    counter = document.querySelector("#counter");
   let hiddenGalleryItems = prepareData(data);
   let displayedGalleryItems = [];
 
@@ -28,18 +27,10 @@
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   }
 
-  //выводим сообщение
-  function showMessage(block, message) {
-    block.innerHTML = message;
-    setTimeout(function() {
-      block.innerHTML = "";
-    }, 2500);
-  }
-
   //формируем и отображаем галерею
   function buildGallery(array) {
     let resultHtml = "";
-    toggleButton(array);
+    //toggleButton(array);
     array.forEach(item => {
       resultHtml += `<div class="col-md-3 col-sm-4 col-xs-6 text-center">
       <div class="thumbnail">
@@ -47,7 +38,7 @@
         <div class="caption">
           <h3>${item.id}: ${item.name}</h3>
           <p>${item.description}</p\
-          <p>${item.date}</p>
+          <p>${formatDate(item.date)}</p>
         </div>
         <button class="btn btn-danger" id="${item.id}">
         Удалить
@@ -58,41 +49,58 @@
     mainDiv.innerHTML = resultHtml;
     counter.innerHTML = array.length;
   }
-
+  
   //получаем результирующий массив объектов
   function prepareData(data) {
-    // let limit;
-    // if (+lineSelector.value) limit = lineSelector.value * 3;
-    // if (limit) data = data.slice(0, limit);
-
     return data.map(item => {
       return {
         url: addHttp(item.url),
         id: item.id,
         name: item.name,
         description: cutString(item.description),
-        date: formatDate(item.date)
+        date: item.date
       };
     });
+  }
+
+  //сортируем массив объектов выбраным способом
+  function sort(data) {
+    let sortedData = data.sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+
+    switch (+sortType.value) {
+      case 1:
+        return sortedData.reverse();
+      case 2:
+        return data.sort((a, b) => Number(b.date) - Number(a.date));
+      case 3:
+        return data.sort((a, b) => Number(a.date) - Number(b.date));
+      case 0:
+      default:
+        return sortedData;
+    }
+
   }
 
   //деактивируем/активируем кнопку
   function toggleButton(array) {
     if (data.length === array.length) {
-      btn.setAttribute("disabled", true); 
+      btn.setAttribute("disabled", true);
       $(".bs-example-modal-sm").modal("show");
     } else {
       btn.removeAttribute("disabled");
     }
   }
 
-  //при нажатии на btn показываем один элемент из массива hiddenGalleryItems
-  function getOneItem() {
+  //при нажатии на btn берем один элемент из массива hiddenGalleryItems
+  function addOneItem() {
     //вырезаем первый обьэкт из массива hiddenGalleryItems,
     //вставляем его в массив displayedGalleryItems
     displayedGalleryItems = displayedGalleryItems.concat(
       hiddenGalleryItems.splice(0, 1)
     );
+    toggleButton(displayedGalleryItems);
     buildGallery(displayedGalleryItems);
   }
 
@@ -110,10 +118,17 @@
       displayedGalleryItems = displayedGalleryItems.filter(item => {
         return item.id !== itemId;
       });
+      toggleButton(displayedGalleryItems);
       buildGallery(displayedGalleryItems);
     }
   }
+//при изменении выбора в selectbox галерея перестраивается
+  function sortItems() {
+    let sortGalleryItems = sort(displayedGalleryItems);
+    buildGallery(sortGalleryItems);    
+  }
 
   mainDiv.addEventListener("click", removeOneItem);
-  btn.addEventListener("click", getOneItem);
+  btn.addEventListener("click", addOneItem);
+  sortType.addEventListener("change", sortItems);
 })();
