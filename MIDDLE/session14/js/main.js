@@ -2,7 +2,7 @@
   "use strict";
   const btn = document.getElementById("play"),
     mainDiv = document.getElementById("mainGallery"),
-    sortType = document.getElementById("sort-type"),
+    sortTypeSelectbox = document.getElementById("sort-type"),
     counter = document.querySelector("#counter");
   let hiddenGalleryItems = prepareData(data);
   let displayedGalleryItems = [];
@@ -49,7 +49,7 @@
     mainDiv.innerHTML = resultHtml;
     counter.innerHTML = array.length;
   }
-  
+
   //получаем результирующий массив объектов
   function prepareData(data) {
     return data.map(item => {
@@ -65,11 +65,11 @@
 
   //сортируем массив объектов выбраным способом
   function sort(data) {
-    let sortedData = data.sort((a, b) =>
-      a.name.localeCompare(b.name)
-    );
+    let sortedData = data.sort((a, b) => a.name.localeCompare(b.name));
 
-    switch (+sortType.value) {
+    localStorage.setItem("sortType", +sortTypeSelectbox.value);
+
+    switch (+sortTypeSelectbox.value) {
       case 1:
         return sortedData.reverse();
       case 2:
@@ -80,7 +80,6 @@
       default:
         return sortedData;
     }
-
   }
 
   //деактивируем/активируем кнопку
@@ -93,6 +92,15 @@
     }
   }
 
+  //проверяем localStorage на наличие sortType
+  function setSortType() {
+    let recordedSortType = localStorage.getItem("sortType");
+    if (recordedSortType) {
+      sortTypeSelectbox.value = recordedSortType;
+    }
+    console.log(recordedSortType);
+  }
+
   //при нажатии на btn берем один элемент из массива hiddenGalleryItems
   function addOneItem() {
     //вырезаем первый обьэкт из массива hiddenGalleryItems,
@@ -100,6 +108,9 @@
     displayedGalleryItems = displayedGalleryItems.concat(
       hiddenGalleryItems.splice(0, 1)
     );
+
+    localStorage.setItem("data", JSON.stringify(displayedGalleryItems));
+
     toggleButton(displayedGalleryItems);
     buildGallery(displayedGalleryItems);
   }
@@ -118,17 +129,21 @@
       displayedGalleryItems = displayedGalleryItems.filter(item => {
         return item.id !== itemId;
       });
+
+      localStorage.setItem("data", JSON.stringify(displayedGalleryItems));
+
       toggleButton(displayedGalleryItems);
       buildGallery(displayedGalleryItems);
     }
   }
-//при изменении выбора в selectbox галерея перестраивается
+  //при изменении выбора в selectbox галерея перестраивается
   function sortItems() {
     let sortGalleryItems = sort(displayedGalleryItems);
-    buildGallery(sortGalleryItems);    
+    buildGallery(sortGalleryItems);
   }
 
+  setSortType();
   mainDiv.addEventListener("click", removeOneItem);
   btn.addEventListener("click", addOneItem);
-  sortType.addEventListener("change", sortItems);
+  sortTypeSelectbox.addEventListener("change", sortItems);
 })();
