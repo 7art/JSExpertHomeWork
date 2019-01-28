@@ -1,11 +1,45 @@
-(function() {
+(function () {
   "use strict";
   const btn = document.getElementById("play"),
     mainDiv = document.getElementById("mainGallery"),
     sortTypeSelectbox = document.getElementById("sort-type"),
     counter = document.querySelector("#counter");
-  let hiddenGalleryItems = prepareData(data);
+  let hiddenGalleryItems = [];
   let displayedGalleryItems = [];
+
+  //деактивируем/активируем кнопку
+  function setToggleButton(array) {
+    if (data.length === array.length) {
+      btn.setAttribute("disabled", true);
+      $(".bs-example-modal-sm").modal("show");
+    } else {
+      btn.removeAttribute("disabled");
+    }
+  }
+
+  //проверяем localStorage на наличие sortType
+  function setSortType() {
+    let sortTypeFromStorage = localStorage.getItem("sortType");
+    if (sortTypeFromStorage) {
+      sortTypeSelectbox.value = sortTypeFromStorage;
+    }
+  }
+
+  //сохранение информации в localStorage
+  function setStorageData(name, arr) {
+    localStorage.setItem(name, JSON.stringify(arr));
+  }
+
+  //получаем данные из localStorage если они там есть
+  function getStorageData() {
+    let hDataFromStorage = JSON.parse(localStorage.getItem("hData"));
+    let sDataFromStorage = JSON.parse(localStorage.getItem("sData"));
+    hiddenGalleryItems = !hDataFromStorage ? prepareData(data) : hDataFromStorage;
+    if (sDataFromStorage) {
+      displayedGalleryItems = sDataFromStorage;
+      buildGallery(displayedGalleryItems);
+    }
+  }
 
   //обрезаем строку
   function cutString(str) {
@@ -25,6 +59,19 @@
   //делаем первую букву большой, остальные маленькие
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  }
+
+  //получаем результирующий массив объектов
+  function prepareData(data) {
+    return data.map(item => {
+      return {
+        url: addHttp(item.url),
+        id: item.id,
+        name: item.name,
+        description: cutString(item.description),
+        date: item.date
+      };
+    });
   }
 
   //формируем и отображаем галерею
@@ -50,19 +97,6 @@
     counter.innerHTML = array.length;
   }
 
-  //получаем результирующий массив объектов
-  function prepareData(data) {
-    return data.map(item => {
-      return {
-        url: addHttp(item.url),
-        id: item.id,
-        name: item.name,
-        description: cutString(item.description),
-        date: item.date
-      };
-    });
-  }
-
   //сортируем массив объектов выбраным способом
   function sort(data) {
     let sortedData = data.sort((a, b) => a.name.localeCompare(b.name));
@@ -81,26 +115,7 @@
         return sortedData;
     }
   }
-
-  //деактивируем/активируем кнопку
-  function toggleButton(array) {
-    if (data.length === array.length) {
-      btn.setAttribute("disabled", true);
-      $(".bs-example-modal-sm").modal("show");
-    } else {
-      btn.removeAttribute("disabled");
-    }
-  }
-
-  //проверяем localStorage на наличие sortType
-  function setSortType() {
-    let recordedSortType = localStorage.getItem("sortType");
-    if (recordedSortType) {
-      sortTypeSelectbox.value = recordedSortType;
-    }
-    console.log(recordedSortType);
-  }
-
+  
   //при нажатии на btn берем один элемент из массива hiddenGalleryItems
   function addOneItem() {
     //вырезаем первый обьэкт из массива hiddenGalleryItems,
@@ -108,41 +123,52 @@
     displayedGalleryItems = displayedGalleryItems.concat(
       hiddenGalleryItems.splice(0, 1)
     );
-
-    localStorage.setItem("data", JSON.stringify(displayedGalleryItems));
-
-    toggleButton(displayedGalleryItems);
+    //сохраняем массивы в localstorage
+    setStorageData("hData", hiddenGalleryItems);
+    setStorageData("sData", displayedGalleryItems);
+    //деактивируем кнопку
+    setToggleButton(displayedGalleryItems);
     buildGallery(displayedGalleryItems);
   }
 
   //при нажатии на btn-danger удаляем один элемент из массива displayedGalleryItems
   function removeOneItem(e) {
-    const itemId = +e.target.id; //id удаляемого объекта
-    if (itemId) {
+    const movedItemId = +e.target.id; //id удаляемого объекта
+    if (movedItemId) {
       // находим объект в массиве displayedGalleryItems
-      let findItem = displayedGalleryItems.filter(item => {
-        return item.id === itemId;
+      let movedItem = displayedGalleryItems.filter(item => {
+        return item.id === movedItemId;
       });
       // добавляєм его в массив hiddenGalleryItems
-      hiddenGalleryItems = hiddenGalleryItems.concat(findItem);
+      hiddenGalleryItems = hiddenGalleryItems.concat(movedItem);
       //удаляем объєкт из массива displayedGalleryItems
       displayedGalleryItems = displayedGalleryItems.filter(item => {
-        return item.id !== itemId;
+        return item.id !== movedItemId;
       });
-
-      localStorage.setItem("data", JSON.stringify(displayedGalleryItems));
-
-      toggleButton(displayedGalleryItems);
+      //сохраняем массивы в localstorage
+      setStorageData("hData", hiddenGalleryItems);
+      setStorageData("sData", displayedGalleryItems);
+      //активируем кнопку
+      setToggleButton(displayedGalleryItems);
+      //показываем галерею
       buildGallery(displayedGalleryItems);
     }
   }
   //при изменении выбора в selectbox галерея перестраивается
   function sortItems() {
-    let sortGalleryItems = sort(displayedGalleryItems);
-    buildGallery(sortGalleryItems);
+    //сортируєм массив выбранным способом
+    let sortedGalleryItems = sort(displayedGalleryItems);
+    //сохраняем массив в localstorage
+    setStorageData("sData", sortedGalleryItems);
+     //показываем галерею
+    buildGallery(sortedGalleryItems);
   }
 
+  //получаем данные из localStorage если они там есть
+  getStorageData();
+  //проверяем localStorage на наличие sortType 
   setSortType();
+  
   mainDiv.addEventListener("click", removeOneItem);
   btn.addEventListener("click", addOneItem);
   sortTypeSelectbox.addEventListener("change", sortItems);
