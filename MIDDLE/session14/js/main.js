@@ -6,6 +6,8 @@
     counter = document.querySelector("#counter");
   let hiddenGalleryItems = [];
   let displayedGalleryItems = [];
+  //let sortType = +sortTypeSelectbox.value;
+ 
 
   //деактивируем/активируем кнопку
   function setToggleButton(array) {
@@ -26,19 +28,25 @@
   }
 
   //сохранение информации в localStorage
-  function setStorageData(name, arr) {
-    localStorage.setItem(name, JSON.stringify(arr));
+  function setStorageData() {
+    let sortType = Number(sortTypeSelectbox.value);
+    //сохраняем массивы в localstorage   
+    localStorage.setItem("hData", JSON.stringify(hiddenGalleryItems));
+    localStorage.setItem("sData", JSON.stringify(displayedGalleryItems));
+    localStorage.setItem("sortType", sortType);
   }
 
   //получаем данные из localStorage если они там есть
   function getStorageData() {
     let hDataFromStorage = JSON.parse(localStorage.getItem("hData"));
     let sDataFromStorage = JSON.parse(localStorage.getItem("sData"));
+   
     hiddenGalleryItems = !hDataFromStorage ? prepareData(data) : hDataFromStorage;
     if (sDataFromStorage) {
       displayedGalleryItems = sDataFromStorage;
       buildGallery(displayedGalleryItems);
     }
+    
   }
 
   //обрезаем строку
@@ -98,12 +106,10 @@
   }
 
   //сортируем массив объектов выбраным способом
-  function sort(data) {
+  function sort(data, value) {
     let sortedData = data.sort((a, b) => a.name.localeCompare(b.name));
 
-    localStorage.setItem("sortType", +sortTypeSelectbox.value);
-
-    switch (+sortTypeSelectbox.value) {
+    switch (value) {
       case 1:
         return sortedData.reverse();
       case 2:
@@ -115,7 +121,7 @@
         return sortedData;
     }
   }
-  
+
   //при нажатии на btn берем один элемент из массива hiddenGalleryItems
   function addOneItem() {
     //вырезаем первый обьэкт из массива hiddenGalleryItems,
@@ -123,9 +129,6 @@
     displayedGalleryItems = displayedGalleryItems.concat(
       hiddenGalleryItems.splice(0, 1)
     );
-    //сохраняем массивы в localstorage
-    setStorageData("hData", hiddenGalleryItems);
-    setStorageData("sData", displayedGalleryItems);
     //деактивируем кнопку
     setToggleButton(displayedGalleryItems);
     buildGallery(displayedGalleryItems);
@@ -133,7 +136,7 @@
 
   //при нажатии на btn-danger удаляем один элемент из массива displayedGalleryItems
   function removeOneItem(e) {
-    const movedItemId = +e.target.id; //id удаляемого объекта
+    const movedItemId = +e.target.id; //id удаляемого объекта //e.getAttribute
     if (movedItemId) {
       // находим объект в массиве displayedGalleryItems
       let movedItem = displayedGalleryItems.filter(item => {
@@ -145,9 +148,6 @@
       displayedGalleryItems = displayedGalleryItems.filter(item => {
         return item.id !== movedItemId;
       });
-      //сохраняем массивы в localstorage
-      setStorageData("hData", hiddenGalleryItems);
-      setStorageData("sData", displayedGalleryItems);
       //активируем кнопку
       setToggleButton(displayedGalleryItems);
       //показываем галерею
@@ -156,20 +156,23 @@
   }
   //при изменении выбора в selectbox галерея перестраивается
   function sortItems() {
+    let sortType = +sortTypeSelectbox.value;
     //сортируєм массив выбранным способом
-    let sortedGalleryItems = sort(displayedGalleryItems);
-    //сохраняем массив в localstorage
-    setStorageData("sData", sortedGalleryItems);
-     //показываем галерею
-    buildGallery(sortedGalleryItems);
+    displayedGalleryItems = sort(displayedGalleryItems, sortType);
+    //сохраняем sortType в localstorage
+    
+    //показываем галерею
+    buildGallery(displayedGalleryItems);
   }
 
   //получаем данные из localStorage если они там есть
   getStorageData();
-  //проверяем localStorage на наличие sortType 
+  //проверяем localStorage на наличие sortType
   setSortType();
-  
+
   mainDiv.addEventListener("click", removeOneItem);
   btn.addEventListener("click", addOneItem);
   sortTypeSelectbox.addEventListener("change", sortItems);
+  window.addEventListener("beforeunload", setStorageData);
+
 })();
