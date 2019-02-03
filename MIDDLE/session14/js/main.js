@@ -6,8 +6,6 @@
     counter = document.querySelector("#counter");
   let hiddenGalleryItems = [];
   let displayedGalleryItems = [];
-  //let sortType = +sortTypeSelectbox.value;
- 
 
   //деактивируем/активируем кнопку
   function setToggleButton(array) {
@@ -29,8 +27,7 @@
 
   //сохранение информации в localStorage
   function setStorageData() {
-    let sortType = Number(sortTypeSelectbox.value);
-    //сохраняем массивы в localstorage   
+    let sortType = +sortTypeSelectbox.value;
     localStorage.setItem("hData", JSON.stringify(hiddenGalleryItems));
     localStorage.setItem("sData", JSON.stringify(displayedGalleryItems));
     localStorage.setItem("sortType", sortType);
@@ -40,13 +37,12 @@
   function getStorageData() {
     let hDataFromStorage = JSON.parse(localStorage.getItem("hData"));
     let sDataFromStorage = JSON.parse(localStorage.getItem("sData"));
-   
     hiddenGalleryItems = !hDataFromStorage ? prepareData(data) : hDataFromStorage;
     if (sDataFromStorage) {
       displayedGalleryItems = sDataFromStorage;
       buildGallery(displayedGalleryItems);
     }
-    
+
   }
 
   //обрезаем строку
@@ -85,7 +81,6 @@
   //формируем и отображаем галерею
   function buildGallery(array) {
     let resultHtml = "";
-    //toggleButton(array);
     array.forEach(item => {
       resultHtml += `<div class="col-md-3 col-sm-4 col-xs-6 text-center">
       <div class="thumbnail">
@@ -95,7 +90,7 @@
           <p>${item.description}</p\
           <p>${formatDate(item.date)}</p>
         </div>
-        <button class="btn btn-danger" id="${item.id}">
+        <button class="btn btn-danger" data-id="${item.id}">
         Удалить
         </button>
       </div>
@@ -106,7 +101,7 @@
   }
 
   //сортируем массив объектов выбраным способом
-  function sort(data, value) {
+  function sortData(data, value) {
     let sortedData = data.sort((a, b) => a.name.localeCompare(b.name));
 
     switch (value) {
@@ -124,50 +119,36 @@
 
   //при нажатии на btn берем один элемент из массива hiddenGalleryItems
   function addOneItem() {
-    //вырезаем первый обьэкт из массива hiddenGalleryItems,
-    //вставляем его в массив displayedGalleryItems
     displayedGalleryItems = displayedGalleryItems.concat(
       hiddenGalleryItems.splice(0, 1)
     );
-    //деактивируем кнопку
     setToggleButton(displayedGalleryItems);
     buildGallery(displayedGalleryItems);
   }
 
   //при нажатии на btn-danger удаляем один элемент из массива displayedGalleryItems
   function removeOneItem(e) {
-    const movedItemId = +e.target.id; //id удаляемого объекта //e.getAttribute
+    const movedItemId = +e.target.getAttribute("data-id");
     if (movedItemId) {
-      // находим объект в массиве displayedGalleryItems
       let movedItem = displayedGalleryItems.filter(item => {
         return item.id === movedItemId;
       });
-      // добавляєм его в массив hiddenGalleryItems
       hiddenGalleryItems = hiddenGalleryItems.concat(movedItem);
-      //удаляем объєкт из массива displayedGalleryItems
       displayedGalleryItems = displayedGalleryItems.filter(item => {
         return item.id !== movedItemId;
       });
-      //активируем кнопку
       setToggleButton(displayedGalleryItems);
-      //показываем галерею
       buildGallery(displayedGalleryItems);
     }
   }
   //при изменении выбора в selectbox галерея перестраивается
   function sortItems() {
     let sortType = +sortTypeSelectbox.value;
-    //сортируєм массив выбранным способом
-    displayedGalleryItems = sort(displayedGalleryItems, sortType);
-    //сохраняем sortType в localstorage
-    
-    //показываем галерею
+    displayedGalleryItems = sortData(displayedGalleryItems, sortType);
     buildGallery(displayedGalleryItems);
   }
 
-  //получаем данные из localStorage если они там есть
   getStorageData();
-  //проверяем localStorage на наличие sortType
   setSortType();
 
   mainDiv.addEventListener("click", removeOneItem);
