@@ -1,6 +1,4 @@
-function setUserData() {
-    if (!localStorage.getItem("login")) {
-            let login = localStorage.setItem("login", "login");
-            let pass = localStorage.setItem("pass", "pass");
-        }
-    }
+const userData = {
+    login: "admin@site.com",
+    password: "admin12345"
+}
