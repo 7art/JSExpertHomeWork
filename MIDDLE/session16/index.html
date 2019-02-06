@@ -9,7 +9,7 @@
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
     crossorigin="anonymous">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="css/style.css" rel="stylesheet">
 </head>
 
@@ -52,11 +52,18 @@
         <div class="row">
           <div class="col">
             <label for="localStorageEmail">Email address</label>
-            <input type="email" class="form-control" id="localStorageEmail" aria-describedby="emailHelp" placeholder="Email">
+            <input type="email" class="form-control" id="outEmail" aria-describedby="emailHelp" placeholder="Email">
           </div>
           <div class="col">
-            <label for="localStoragePassword">Password</label>
-            <input type="password" class="form-control" id="localStoragePassword" placeholder="Password">
+            <div class="form-group">
+              <label>Password</label>
+              <div class="input-group" id="show_hide_password">
+                <input class="form-control" id="outPassword" type="password">
+                <div class="input-group-addon">
+                  <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="row">

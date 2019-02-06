@@ -1,90 +1,128 @@
-(function () {
-    const loginBtn = document.querySelector("#signin");
-    const backBtn = document.querySelector("#moveback");
+"use strict"
+const loginBtn = document.querySelector("#signin");
+
+function Signin() {
+    const backBtn = document.getElementById("moveback");
+    const hidePass = document.querySelector(".fa");
+    const content = document.querySelector("#content");
+    const loginForm = document.querySelector("#login-form");
+    const inpEmail = document.querySelector("#inputEmail");
+    const inpPassword = document.querySelector("#inputPassword");
+    const outEmail = document.querySelector("#outEmail");
+    const outPassword = document.querySelector("#outPassword");
     let errorMessArr = [];
 
-    function showMessage(arr) {
-        const alerts = document.querySelector(".alerts");
-        let text = "";
-        arr.forEach(function (item, index, array) {
-            text += `<p class="text-left">${item}</p><hr>`;
-        });
-        alerts.innerHTML = text;
-        $(".bd-modal-sm").modal("show");
-    }
-
-    function validate() {
+    let validate = function () {
         const regEmail = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-        const regPasswd = /^[a-zA-Z0-9]+$/;
-        const inputEmail = document.querySelector("#inputEmail").value;
-        const inputPassword = document.querySelector("#inputPassword").value;
+        const regPasswd = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]{8,16}$/;
+        const inputEmail = inpEmail.value;
+        const inputPassword = inpPassword.value;
         let login = localStorage.getItem("login");
         let password = localStorage.getItem("password");
         let valid = true;
 
         errorMessArr.length = 0;
 
-        if (inputEmail !== '' && inputPassword !== '') {
-            if (regEmail.test(inputEmail) == false) {
+        let checkValidEmail = function () {
+            if (!regEmail.test(inputEmail)) {
                 errorMessArr.push("Вы ввели некорректный адрес электронной почты");
                 valid = false;
-            } else if (regPasswd.test(inputPassword) == false) {
-                errorMessArr.push("Пароль должен содержать только латинские буквы и цифры");
-                valid = false;
-            } else if (inputPassword.length <= 7 || inputPassword.length >= 15) {
-                errorMessArr.push("Длинна пароля должна быть от 8 до 15 символов");
-                valid = false;
-            } else {
-                if (inputEmail !== login) {
-                    errorMessArr.push("Введен неверный Email");
-                    valid = false;
-                }
-                if (inputPassword !== password) {
-                    errorMessArr.push("Введен неверный пароль");
-                    valid = false;
-                }
             }
-        } else {
-            errorMessArr.push("Введите Ваш логин и пароль");
-            valid = false;
+        }
+
+        let checkValidPassword = function () {
+            if (!regPasswd.test(inputPassword)) {
+                errorMessArr.push("Пароль должен быть от 8 до 15 символов длинной");
+                valid = false;
+            }
+        }
+
+        let checkFields = function () {
+            if (inputEmail === '' || inputPassword === '') {
+                errorMessArr.push("Введите Ваш логин и пароль");
+                return false;
+            }
+            checkValidEmail();
+            checkValidPassword();
+            return valid;
+        }
+
+        let checkData = function () {
+            if (inputEmail !== login) {
+                errorMessArr.push("Введен неверный Email");
+                valid = false;
+            }
+            if (inputPassword !== password) {
+                errorMessArr.push("Введен неверный пароль");
+                valid = false;
+            }
+        }
+        valid = checkFields();
+        if (valid) {
+            checkData();
         }
         return valid;
     }
 
-    function moveBack() {
-        const content = document.querySelector("#content");
-        const loginForm = document.querySelector("#login-form");      
-        content.classList.remove('d-block');
-        content.classList.add('d-none');
-        loginForm.classList.remove('d-none');
-        loginForm.classList.add('d-block'); 
+    let setFormData = function () {
+        outEmail.value = inpEmail.value;
+        outPassword.value = inpPassword.value;
     }
 
-    //принимает объект с логином и паролем с которым мы будем сверяться;
-    function setLogAndPass() {} {
-        if (!localStorage.getItem("login")) {
-            localStorage.setItem("login", userData.login);
-            localStorage.setItem("password", userData.password);
+    this.setLogAndPass = function () {
+        localStorage.setItem("login", userData.login);
+        localStorage.setItem("password", userData.password);
+    }
+
+    let showMessage = function (arr) {
+        const alerts = document.querySelector(".alerts");
+        let text = "";
+        arr.forEach(item => {
+            text += `<p class="text-left">${item}</p><hr>`;
+        });
+        alerts.innerHTML = text;
+        $(".bd-modal-sm").modal("show");
+    }
+
+    let showHideBlock = function (showBlock, hideBlock) {
+        showBlock.classList.remove('d-none');
+        showBlock.classList.add('d-block');
+        hideBlock.classList.remove('d-block');
+        hideBlock.classList.add('d-none');
+    }
+
+    let showHidePassword = function () {
+        if (outPassword.type === "password") {
+            outPassword.type = "text";
+            hidePass.classList.remove('fa-eye');
+            hidePass.classList.add('fa-eye-slash');
+        } else {
+            outPassword.type = "password";
+            hidePass.classList.remove('fa-eye-slash');
+            hidePass.classList.add('fa-eye');
         }
     }
 
-    //непосредственно запускает приложение
-    // function initComponent() {}
-
-    function checkingUserData() {
-        setLogAndPass();
+    this.initComponent = function () {
         if (validate()) {
-            const content = document.querySelector("#content");
-            const loginForm = document.querySelector("#login-form");
-            content.classList.remove('d-none');
-            content.classList.add('d-block');           
-            loginForm.classList.remove('d-block');
-            loginForm.classList.add('d-none');
+            showHideBlock(content, loginForm);
+            setFormData();
         } else {
             showMessage(errorMessArr);
         }
     }
 
-    loginBtn.addEventListener("click", checkingUserData);
-    backBtn.addEventListener("click", moveBack);
-})()
+    backBtn.addEventListener("click", () => {
+        showHideBlock(loginForm, content);
+    });
+
+    hidePass.addEventListener("click", showHidePassword);
+}
+
+const checkingUserData = new Signin();
+
+checkingUserData.setLogAndPass();
+
+loginBtn.addEventListener("click", () => {
+    checkingUserData.initComponent();
+});
