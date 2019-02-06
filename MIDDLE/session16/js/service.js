@@ -16,11 +16,10 @@
     }
 
     let setAndClear = function () {
-        console.log(oldValue);
         passwordField.value = oldValue;
         oldValue = "";
     }
-    
+
     passwordField.addEventListener("input", hidePassChar);
     logBtn.addEventListener("click", setAndClear);
 })()
