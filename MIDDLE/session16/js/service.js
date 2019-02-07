@@ -16,6 +16,7 @@
     }
 
     let setAndClear = function () {
+        passwordField.type = "password";
         passwordField.value = oldValue;
         oldValue = "";
     }
