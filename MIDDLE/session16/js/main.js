@@ -20,53 +20,48 @@ function Signin() {
         let password = localStorage.getItem("password");
         let valid = false;
 
-        errorMessArr.length = 0;     
+        errorMessArr.length = 0;
 
         function checkFieldsNotEmpty() {
             if (inputEmail === '' || inputPassword === '') {
                 errorMessArr.push("Введите Ваш логин и пароль");
-                valid = false;
-            } else {
-                valid = true;
+                return valid = false;
             }
+            return valid = true;
         }
 
         function checkData() {
             if (inputEmail !== login) {
                 errorMessArr.push("Введен неверный Email");
-                valid = false;
-            } else if (inputPassword !== password) {
-                errorMessArr.push("Введен неверный пароль");
-                valid = false;
-            } else {
-                valid = true;
+                return valid = false;
             }
-
+            if (inputPassword !== password) {
+                errorMessArr.push("Введен неверный пароль");
+                return valid = false;
+            }
+            return valid = true;
         }
 
         function checkValidPassword() {
             if (!regPasswd.test(inputPassword)) {
                 errorMessArr.push("Пароль должен быть от 8 до 15 символов длинной");
-                valid = false;
-            } else {
-                valid = true;
+                return valid = false;
             }
+            return valid = true;
         }
 
         function checkValidEmail() {
             if (!regEmail.test(inputEmail)) {
                 errorMessArr.push("Вы ввели некорректный адрес электронной почты");
-                valid = false;
-            } else {
-                valid = true;
+                return valid = false;
             }
+            return valid = true;
         }
         checkFieldsNotEmpty();
-
         if (valid) checkValidEmail();
         if (valid) checkValidPassword();
         if (valid) checkData();
-        
+
         return valid;
 
     }
