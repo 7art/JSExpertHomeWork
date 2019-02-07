@@ -2,7 +2,7 @@
     const passwordField = document.querySelector("#inputPassword");
     const logBtn = document.querySelector("#signin");
 
-    let oldValue = "";
+    let oldValue = "";    
 
     let hidePassChar = function () {
         oldValue += passwordField.value.substring(oldValue.length, passwordField.value.length);
@@ -23,4 +23,5 @@
 
     passwordField.addEventListener("input", hidePassChar);
     logBtn.addEventListener("click", setAndClear);
+
 })()

@@ -1,4 +1,3 @@
-"use strict"
 const loginBtn = document.querySelector("#signin");
 
 function Signin() {
@@ -12,56 +11,64 @@ function Signin() {
     const outPassword = document.querySelector("#outPassword");
     let errorMessArr = [];
 
-    let validate = function () {
+    let checkFields = function () {
         const regEmail = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
         const regPasswd = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]{8,16}$/;
-        const inputEmail = inpEmail.value;
-        const inputPassword = inpPassword.value;
+        const inputEmail = inpEmail.value.trim();
+        const inputPassword = inpPassword.value.trim();
         let login = localStorage.getItem("login");
         let password = localStorage.getItem("password");
-        let valid = true;
+        let valid = false;
 
-        errorMessArr.length = 0;
+        errorMessArr.length = 0;     
 
-        let checkValidEmail = function () {
-            if (!regEmail.test(inputEmail)) {
-                errorMessArr.push("Вы ввели некорректный адрес электронной почты");
-                valid = false;
-            }
-        }
-
-        let checkValidPassword = function () {
-            if (!regPasswd.test(inputPassword)) {
-                errorMessArr.push("Пароль должен быть от 8 до 15 символов длинной");
-                valid = false;
-            }
-        }
-
-        let checkFields = function () {
+        function checkFieldsNotEmpty() {
             if (inputEmail === '' || inputPassword === '') {
                 errorMessArr.push("Введите Ваш логин и пароль");
-                return false;
+                valid = false;
+            } else {
+                valid = true;
             }
-            checkValidEmail();
-            checkValidPassword();
-            return valid;
         }
 
-        let checkData = function () {
+        function checkData() {
             if (inputEmail !== login) {
                 errorMessArr.push("Введен неверный Email");
                 valid = false;
-            }
-            if (inputPassword !== password) {
+            } else if (inputPassword !== password) {
                 errorMessArr.push("Введен неверный пароль");
                 valid = false;
+            } else {
+                valid = true;
+            }
+
+        }
+
+        function checkValidPassword() {
+            if (!regPasswd.test(inputPassword)) {
+                errorMessArr.push("Пароль должен быть от 8 до 15 символов длинной");
+                valid = false;
+            } else {
+                valid = true;
             }
         }
-        valid = checkFields();
-        if (valid) {
-            checkData();
+
+        function checkValidEmail() {
+            if (!regEmail.test(inputEmail)) {
+                errorMessArr.push("Вы ввели некорректный адрес электронной почты");
+                valid = false;
+            } else {
+                valid = true;
+            }
         }
+        checkFieldsNotEmpty();
+
+        if (valid) checkValidEmail();
+        if (valid) checkValidPassword();
+        if (valid) checkData();
+        
         return valid;
+
     }
 
     let setFormData = function () {
@@ -69,9 +76,13 @@ function Signin() {
         outPassword.value = inpPassword.value;
     }
 
-    this.setLogAndPass = function () {
-        localStorage.setItem("login", userData.login);
-        localStorage.setItem("password", userData.password);
+
+    this.setLogAndPass = function ({
+        login,
+        password
+    }) {
+        localStorage.setItem("login", login);
+        localStorage.setItem("password", password);
     }
 
     let showMessage = function (arr) {
@@ -104,7 +115,7 @@ function Signin() {
     }
 
     this.initComponent = function () {
-        if (validate()) {
+        if (checkFields()) {
             showHideBlock(content, loginForm);
             setFormData();
         } else {
@@ -121,7 +132,7 @@ function Signin() {
 
 const checkingUserData = new Signin();
 
-checkingUserData.setLogAndPass();
+checkingUserData.setLogAndPass(userData);
 
 loginBtn.addEventListener("click", () => {
     checkingUserData.initComponent();
