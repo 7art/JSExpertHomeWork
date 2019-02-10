@@ -3,8 +3,7 @@ let Validator = function (userData) {
     this.content = document.querySelector("#content");
     this.galleryDiv = document.querySelector("#gallery");
     this.loginForm = document.querySelector("#login-form");
-    const loginBtn = document.querySelector("#login-btn");
-    const exitBtn = document.querySelector("#exit-btn");
+    const navPills = document.querySelector(".nav-pills");
     const hidePass = document.querySelector(".fa");
     const inpEmail = document.querySelector("#inputEmail");
     const inpPassword = document.querySelector("#inputPassword");
@@ -13,7 +12,8 @@ let Validator = function (userData) {
     let errorMessArr = [];
     this.errorMessArr = errorMessArr;
 
-    let checkFields = function () {
+    this.checkFields = function () {
+
         const regEmail = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
         const regPasswd = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]{8,16}$/;
         const inputEmail = inpEmail.value.trim();
@@ -25,6 +25,7 @@ let Validator = function (userData) {
         errorMessArr.length = 0;
 
         function checkFieldsNotEmpty() {
+
             if (inputEmail === '' || inputPassword === '') {
                 errorMessArr.push("Введите Ваш логин и пароль");
                 return valid = false;
@@ -67,16 +68,7 @@ let Validator = function (userData) {
         return valid;
 
     }
-
-    // this.setFormData = function () {
-    //     outEmail.value = inpEmail.value;
-    //     outPassword.value = inpPassword.value;
-    // }
-    this.clearData = function () {
-        localStorage.clear();
-        inpEmail.value = "";
-        inpPassword.value = "";
-    }
+ 
 
     this.setUserIsAutorized = function () {
         let date = new Date().getTime();
@@ -87,7 +79,7 @@ let Validator = function (userData) {
         return localStorage.getItem("autorizedID");
     }
 
-    let showMessage = function (arr) {
+    this.showMessage = function (arr) {
         const alerts = document.querySelector(".alerts");
         let text = "";
         arr.forEach(item => {
@@ -97,16 +89,10 @@ let Validator = function (userData) {
         $(".bd-modal-sm").modal("show");
     }
 
-    this.showHideBlock = function (showBlock, hideBlock) {
-        // showBlock.classList.remove('d-none');
-        // showBlock.classList.add('d-block');
-        // hideBlock.classList.remove('d-block');
-        // hideBlock.classList.add('d-none');
-      
+    this.showHideBlock = function (showBlock, hideBlock, exitBtn) {
         showBlock.classList.toggle('d-none');
         hideBlock.classList.toggle('d-none');
-       
-        showExitBtn();
+        showTopMenu();
     }
 
     let showHidePassword = function () {
@@ -121,40 +107,32 @@ let Validator = function (userData) {
         }
     }
 
-    let showExitBtn = function () {
-        exitBtn.classList.toggle('d-none');
-        // if (exitBtn.classList.contains("d-none")) {
-        //     exitBtn.classList.remove('d-none');
-        //     exitBtn.classList.add('d-block');
-        // } else {
-        //     exitBtn.classList.remove('d-block');
-        //     exitBtn.classList.add('d-none');
-        // }
+    let showTopMenu = function () {
+        navPills.classList.toggle('d-none');
     }
 
-    this.exitEvent = function () {
-        exitBtn.addEventListener("click", () => {
-            this.showHideBlock(this.loginForm, this.galleryDiv);
-            this.clearData();
-            this.loginEvant();
-        });
+    this.clearData = function () {
+        localStorage.clear();
+        inpEmail.value = "";
+        inpPassword.value = "";
     }
-    this.loginEvant = function () {
-        loginBtn.addEventListener("click", () => {
-            this.initValidator();
-        });
-    }
+    
+    // this.loginEvant = function () {
+    //     loginBtn.addEventListener("click", () => {
+    //         this.initValidator();
+    //     });
+    // }
 
-    this.initValidator = function () {
-        if (checkFields()) {
-            this.setUserIsAutorized();
-            this.showHideBlock(this.galleryDiv, this.loginForm);
-            this.exitEvent();
-            //setFormData();
-        } else {
-            showMessage(errorMessArr);
-        }
-    }
+    // this.initValidator = function () {
+    //     if (checkFields()) {
+    //         this.setUserIsAutorized();
+    //         this.showHideBlock(this.galleryDiv, this.loginForm);
+    //         this.exitEvent();
+    //         //setFormData();
+    //     } else {
+    //         showMessage(errorMessArr);
+    //     }
+    // }
 
     /* hidePass.addEventListener("click", showHidePassword);*/
 }
