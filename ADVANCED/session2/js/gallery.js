@@ -30,4 +30,4 @@ ExtendedGallery.prototype = {
 
 // код функции наследования можно найти архиве, который содержится 
 // в материалах к сессии 29 (практический пример)
-service.inheritance(BaseGallery, ExtendedGallery);
+//service.inheritance(BaseGallery, ExtendedGallery);
