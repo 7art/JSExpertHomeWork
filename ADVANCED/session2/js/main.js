@@ -80,11 +80,11 @@ let Validator = function (userData) {
 
     this.setUserIsAutorized = function () {
         let date = new Date().getTime();
-        localStorage.setItem("autorized", date);
+        localStorage.setItem("autorizedID", date);
     }
 
     this.getUserIsAutorized = function () {
-        return localStorage.getItem("autorized");
+        return localStorage.getItem("autorizedID");
     }
 
     let showMessage = function (arr) {
