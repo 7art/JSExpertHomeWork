@@ -1,9 +1,10 @@
+"use strict"
 let Validator = function (userData) {
-    this.loginBtn = document.querySelector("#login-btn");
-    this.exitBtn = document.querySelector("#exit-btn");
-    const hidePass = document.querySelector(".fa");
     this.content = document.querySelector("#content");
     this.loginForm = document.querySelector("#login-form");
+    const loginBtn = document.querySelector("#login-btn");
+    const exitBtn = document.querySelector("#exit-btn");
+    const hidePass = document.querySelector(".fa");
     const inpEmail = document.querySelector("#inputEmail");
     const inpPassword = document.querySelector("#inputPassword");
     const outEmail = document.querySelector("#outEmail");
@@ -11,7 +12,7 @@ let Validator = function (userData) {
     let errorMessArr = [];
     this.errorMessArr = errorMessArr;
 
-    checkFields = function () {
+    let checkFields = function () {
         const regEmail = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
         const regPasswd = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]{8,16}$/;
         const inputEmail = inpEmail.value.trim();
@@ -66,11 +67,15 @@ let Validator = function (userData) {
 
     }
 
-    this.setFormData = function () {
-        outEmail.value = inpEmail.value;
-        outPassword.value = inpPassword.value;
+    // this.setFormData = function () {
+    //     outEmail.value = inpEmail.value;
+    //     outPassword.value = inpPassword.value;
+    // }
+    this.clearData = function () {
+        localStorage.clear();
+        inpEmail.value = "";
+        inpPassword.value = "";
     }
-
     this.setUserIsAutorized = function () {
         let date = new Date().getTime();
         localStorage.setItem("autorized", date);
@@ -80,7 +85,7 @@ let Validator = function (userData) {
         return localStorage.getItem("autorized");
     }
 
-    showMessage = function (arr) {
+    let showMessage = function (arr) {
         const alerts = document.querySelector(".alerts");
         let text = "";
         arr.forEach(item => {
@@ -95,6 +100,7 @@ let Validator = function (userData) {
         showBlock.classList.add('d-block');
         hideBlock.classList.remove('d-block');
         hideBlock.classList.add('d-none');
+        showExitBtn();
     }
 
     let showHidePassword = function () {
@@ -109,29 +115,27 @@ let Validator = function (userData) {
         }
     }
 
-    let showLoginExit = function () {
-        if (outPassword.type === "password") {
-            outPassword.type = "text";
-            hidePass.classList.remove('fa-eye');
-            hidePass.classList.add('fa-eye-slash');
+    let showExitBtn = function () {
+        if (exitBtn.classList.contains("d-none")) {
+            exitBtn.classList.remove('d-none');
+            exitBtn.classList.add('d-block');
         } else {
-            outPassword.type = "password";
-            hidePass.classList.remove('fa-eye-slash');
-            hidePass.classList.add('fa-eye');
+            exitBtn.classList.remove('d-block');
+            exitBtn.classList.add('d-none');
         }
     }
 
     this.exitEvent = function () {
-        this.exitBtn.addEventListener("click", () => {
+        exitBtn.addEventListener("click", () => {
             this.showHideBlock(this.loginForm, this.content);
-            localStorage.clear();
+            this.clearData();
             this.loginEvant();
         });
     }
     this.loginEvant = function () {
-        this.loginBtn.addEventListener("click", () => {
+        loginBtn.addEventListener("click", () => {
             this.initValidator();
-        });        
+        });
     }
 
     this.initValidator = function () {
@@ -140,7 +144,7 @@ let Validator = function (userData) {
             this.showHideBlock(this.content, this.loginForm);
             //setFormData();
         } else {
-            showMessage(this.errorMessArr);
+            showMessage(errorMessArr);
         }
     }
 

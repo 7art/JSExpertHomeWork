@@ -9,7 +9,7 @@ LoginForm.prototype = {
 		if (!this.validator.getUserIsAutorized()) {
 			this.validator.loginEvant();
 		}else{
-			this.validator.showHideBlock(this.validator.content, this.validator.loginForm);
+			this.validator.showHideBlock(this.validator.content, this.validator.loginForm);			
 			this.validator.exitEvent();
 		}
 	},
