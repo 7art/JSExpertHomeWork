@@ -24,17 +24,17 @@
     <div class="btn btn-outline-primary d-none" id="exit-btn">Выход</div>
   </div>
 
-  <main class="text-center d-block" role="main" id="login-form">
+  <main class="text-center" role="main" id="login-form">
 
     <form class="form-signin">
 
       <h1 class="h3 mb-3 font-weight-normal">Пожалуйста войдите</h1>
       <label for="inputEmail" class="sr-only">Email</label>
-      <input type="text" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus=""
+      <input type="text" id="inputEmail" class="form-control" value="admin@site.com" placeholder="Email address" required="" autofocus=""
         autocomplete="off">
       <div class="mb-3"></div>
       <label for="inputPassword" class="sr-only">Пароль</label>
-      <input type="text" id="inputPassword" class="form-control" placeholder="Password" required="" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;"
+      <input type="text" id="inputPassword" class="form-control" value="admin12345" placeholder="Password" required="" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;"
         autocomplete="off">
       <div class="mb-3"></div>
       <div class="btn btn-lg btn-primary btn-block" id="login-btn">Войти</div>
@@ -43,7 +43,7 @@
   </main>
 
 
-  <main role="main" class="d-none" id="content">
+  <main role="main" class="text-center d-none" id="gallery">
     <section class="jumbotron text-center">
       <div class="container">
         <h1 class="jumbotron-heading">Автомобильная галлерея</h1>
@@ -190,6 +190,40 @@
       </div>
     </div>
   </main>
+
+  <main class="text-center d-none" role="main" id="content">
+    <div class="container">
+      <div class="row">
+        <div class="col text-left">
+          <h2>Информация о пользователе</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <label for="localStorageEmail">Email address</label>
+          <input type="email" class="form-control" id="outEmail" aria-describedby="emailHelp" placeholder="Email">
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Password</label>
+            <div class="input-group" id="show_hide_password">
+              <input class="form-control" id="outPassword" type="password">
+              <div class="input-group-addon">
+                <i class="fa fa-eye-slash" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="btn btn-lg btn-primary btn-block mt-5 mb-3" id="moveback">Вернуться назад</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+
 
   <div class="modal fade bd-modal-sm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">

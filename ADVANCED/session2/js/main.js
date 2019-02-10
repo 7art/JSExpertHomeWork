@@ -1,6 +1,7 @@
 "use strict"
 let Validator = function (userData) {
     this.content = document.querySelector("#content");
+    this.galleryDiv = document.querySelector("#gallery");
     this.loginForm = document.querySelector("#login-form");
     const loginBtn = document.querySelector("#login-btn");
     const exitBtn = document.querySelector("#exit-btn");
@@ -76,6 +77,7 @@ let Validator = function (userData) {
         inpEmail.value = "";
         inpPassword.value = "";
     }
+
     this.setUserIsAutorized = function () {
         let date = new Date().getTime();
         localStorage.setItem("autorized", date);
@@ -96,10 +98,14 @@ let Validator = function (userData) {
     }
 
     this.showHideBlock = function (showBlock, hideBlock) {
-        showBlock.classList.remove('d-none');
-        showBlock.classList.add('d-block');
-        hideBlock.classList.remove('d-block');
-        hideBlock.classList.add('d-none');
+        // showBlock.classList.remove('d-none');
+        // showBlock.classList.add('d-block');
+        // hideBlock.classList.remove('d-block');
+        // hideBlock.classList.add('d-none');
+      
+        showBlock.classList.toggle('d-none');
+        hideBlock.classList.toggle('d-none');
+       
         showExitBtn();
     }
 
@@ -116,18 +122,19 @@ let Validator = function (userData) {
     }
 
     let showExitBtn = function () {
-        if (exitBtn.classList.contains("d-none")) {
-            exitBtn.classList.remove('d-none');
-            exitBtn.classList.add('d-block');
-        } else {
-            exitBtn.classList.remove('d-block');
-            exitBtn.classList.add('d-none');
-        }
+        exitBtn.classList.toggle('d-none');
+        // if (exitBtn.classList.contains("d-none")) {
+        //     exitBtn.classList.remove('d-none');
+        //     exitBtn.classList.add('d-block');
+        // } else {
+        //     exitBtn.classList.remove('d-block');
+        //     exitBtn.classList.add('d-none');
+        // }
     }
 
     this.exitEvent = function () {
         exitBtn.addEventListener("click", () => {
-            this.showHideBlock(this.loginForm, this.content);
+            this.showHideBlock(this.loginForm, this.galleryDiv);
             this.clearData();
             this.loginEvant();
         });
@@ -141,7 +148,8 @@ let Validator = function (userData) {
     this.initValidator = function () {
         if (checkFields()) {
             this.setUserIsAutorized();
-            this.showHideBlock(this.content, this.loginForm);
+            this.showHideBlock(this.galleryDiv, this.loginForm);
+            this.exitEvent();
             //setFormData();
         } else {
             showMessage(errorMessArr);
