@@ -3,7 +3,7 @@ let Validator = function () {
     // this.galleryDiv = document.querySelector("#gallery");
     // this.loginFormDiv = document.querySelector("#login-form");
     //const navPills = document.querySelector(".nav-pills");
-    this.hidePass = document.querySelector(".fa");
+   // this.hidePass = document.querySelector(".fa");
     const inpEmail = document.querySelector("#inputEmail");
     const inpPassword = document.querySelector("#inputPassword");
     this.outEmail = document.querySelector("#outEmail");
@@ -78,7 +78,7 @@ let Validator = function () {
         this.outEmail.value = login;
         this.outPassword.value = password;        
     }
-    
+
     this.getUserIsAutorized = function () {
         return localStorage.getItem("autorizedID");
     }
@@ -91,21 +91,7 @@ let Validator = function () {
         });
         alerts.innerHTML = text;
         $(".bd-modal-sm").modal("show");
-    }
-
-    this.showHidePassword = function () {
-        if (this.outPassword.type === "password") {
-            this.outPassword.type = "text";
-            this.hidePass.classList.remove('fa-eye');
-            this.hidePass.classList.add('fa-eye-slash');
-        } else {
-            this.outPassword.type = "password";
-            this.hidePass.classList.remove('fa-eye-slash');
-            this.hidePass.classList.add('fa-eye');
-        }
-    }
-
-
+    } 
 
     /* hidePass.addEventListener("click", showHidePassword);*/
 }

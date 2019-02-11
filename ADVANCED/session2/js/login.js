@@ -6,6 +6,10 @@ let LoginForm = function (validatorModule, galleryModule, userData) {
 	this.galleryDiv = document.querySelector("#gallery");
 	this.loginFormDiv = document.querySelector("#login-form");
 	this.topMenu = document.querySelector(".nav-pills");
+	this.hidePassBtn = document.querySelector(".input-group-addon");
+	this.hidePass = document.querySelector(".fa");
+	//this.outEmail = validatorModule.outEmail;
+    this.outPassword = validatorModule.outPassword;
 	//const navPills = document.querySelector(".nav-pills");
 	this.validator = validatorModule;
 	this.gallery = galleryModule;
@@ -31,6 +35,18 @@ let LoginForm = function (validatorModule, galleryModule, userData) {
 		this.selectedItem.classList.remove('d-none');
 	}
 
+	this.showHidePassword = function () {
+        if (this.outPassword.type === "text") {
+            this.outPassword.type = "password";
+            this.hidePass.classList.remove('fa-eye');
+            this.hidePass.classList.add('fa-eye-slash');
+        } else {
+            this.outPassword.type = "text";
+            this.hidePass.classList.remove('fa-eye-slash');
+            this.hidePass.classList.add('fa-eye');
+        }
+    }
+
 	this.clearData = function () {
 		localStorage.clear();
 		// inpEmail.value = "";
@@ -54,9 +70,9 @@ LoginForm.prototype = {
 			this.loginEvant();
 		});
 	},
-	passwordEvant: function () {
-		this.validator.hidePass.addEventListener("click", () => {
-			this.validator.showHidePassword();
+	passwordEvant: function () {		
+		this.hidePassBtn.addEventListener("click", (e) => {			
+			this.showHidePassword();			
 		});
 	},
 	initValidator: function () {
@@ -71,6 +87,7 @@ LoginForm.prototype = {
 		this.showHideBlock(this.galleryDiv);
 		this.showTopMenu();
 		this.setActiveTopMenu();
+		this.passwordEvant();
 		this.exitEvent();
 	},
 	initComponent: function () {
@@ -93,16 +110,15 @@ LoginForm.prototype = {
 		}
 		activeItem(this.topMenu.querySelector(".gallery"));
 		this.topMenu.addEventListener("click", (e) => {
+			//e.stopPropagation();
 			activeItem(e.target);
 			if (e.target.classList.contains("aboutuser")) {
 				this.showHideBlock(this.userInfoDiv);
-				this.validator.setUserData(userData);
-				this.passwordEvant();
+				this.validator.setUserData(userData);				
 			} else {
 				this.showHideBlock(this.galleryDiv);
 			}
-		});
-
+		});		
 	},
 	showGallery: function () {
 		this.gallery.init();
