@@ -1,24 +1,24 @@
 "use strict"
-let Validator = function (userData) {    
-   // this.galleryDiv = document.querySelector("#gallery");
-   // this.loginFormDiv = document.querySelector("#login-form");
+let Validator = function () {
+    // this.galleryDiv = document.querySelector("#gallery");
+    // this.loginFormDiv = document.querySelector("#login-form");
     //const navPills = document.querySelector(".nav-pills");
-    const hidePass = document.querySelector(".fa");
+    this.hidePass = document.querySelector(".fa");
     const inpEmail = document.querySelector("#inputEmail");
     const inpPassword = document.querySelector("#inputPassword");
-    const outEmail = document.querySelector("#outEmail");
-    const outPassword = document.querySelector("#outPassword");
+    this.outEmail = document.querySelector("#outEmail");
+    this.outPassword = document.querySelector("#outPassword");
     let errorMessArr = [];
     this.errorMessArr = errorMessArr;
 
-    this.checkFields = function () {
+    this.checkFields = function ({login, password}) {
 
         const regEmail = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
         const regPasswd = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]{8,16}$/;
         const inputEmail = inpEmail.value.trim();
         const inputPassword = inpPassword.value.trim();
-        let login = userData.login;
-        let password = userData.password;
+        //let login = userData.login;
+       // let password = userData.password;
         let valid = false;
 
         errorMessArr.length = 0;
@@ -67,13 +67,18 @@ let Validator = function (userData) {
         return valid;
 
     }
- 
+
 
     this.setUserIsAutorized = function () {
         let date = new Date().getTime();
         localStorage.setItem("autorizedID", date);
     }
 
+    this.setUserData = function ({login, password}) {
+        this.outEmail.value = login;
+        this.outPassword.value = password;        
+    }
+    
     this.getUserIsAutorized = function () {
         return localStorage.getItem("autorizedID");
     }
@@ -86,31 +91,31 @@ let Validator = function (userData) {
         });
         alerts.innerHTML = text;
         $(".bd-modal-sm").modal("show");
-    }  
+    }
 
-    let showHidePassword = function () {
-        if (outPassword.type === "password") {
-            outPassword.type = "text";
-            hidePass.classList.remove('fa-eye');
-            hidePass.classList.add('fa-eye-slash');
+    this.showHidePassword = function () {
+        if (this.outPassword.type === "password") {
+            this.outPassword.type = "text";
+            this.hidePass.classList.remove('fa-eye');
+            this.hidePass.classList.add('fa-eye-slash');
         } else {
-            outPassword.type = "password";
-            hidePass.classList.remove('fa-eye-slash');
-            hidePass.classList.add('fa-eye');
+            this.outPassword.type = "password";
+            this.hidePass.classList.remove('fa-eye-slash');
+            this.hidePass.classList.add('fa-eye');
         }
-    }    
+    }
 
-    
 
-   /* hidePass.addEventListener("click", showHidePassword);*/
+
+    /* hidePass.addEventListener("click", showHidePassword);*/
 }
 
 
-let validatorModule = new Validator(userData);
+let validatorModule = new Validator();
 
 let galleryModule = new BaseGallery();
 //let galleryModule = new ExtendedGallery();
 
-let loginForm = new LoginForm(validatorModule, galleryModule);
+let loginForm = new LoginForm(validatorModule, galleryModule, userData);
 
 loginForm.initComponent();
