@@ -1,9 +1,8 @@
 "use strict"
-let Validator = function (userData) {
-    this.content = document.querySelector("#content");
-    this.galleryDiv = document.querySelector("#gallery");
-    this.loginForm = document.querySelector("#login-form");
-    const navPills = document.querySelector(".nav-pills");
+let Validator = function (userData) {    
+   // this.galleryDiv = document.querySelector("#gallery");
+   // this.loginFormDiv = document.querySelector("#login-form");
+    //const navPills = document.querySelector(".nav-pills");
     const hidePass = document.querySelector(".fa");
     const inpEmail = document.querySelector("#inputEmail");
     const inpPassword = document.querySelector("#inputPassword");
@@ -87,13 +86,7 @@ let Validator = function (userData) {
         });
         alerts.innerHTML = text;
         $(".bd-modal-sm").modal("show");
-    }
-
-    this.showHideBlock = function (showBlock, hideBlock, exitBtn) {
-        showBlock.classList.toggle('d-none');
-        hideBlock.classList.toggle('d-none');
-        showTopMenu();
-    }
+    }  
 
     let showHidePassword = function () {
         if (outPassword.type === "password") {
@@ -105,36 +98,11 @@ let Validator = function (userData) {
             hidePass.classList.remove('fa-eye-slash');
             hidePass.classList.add('fa-eye');
         }
-    }
+    }    
 
-    let showTopMenu = function () {
-        navPills.classList.toggle('d-none');
-    }
-
-    this.clearData = function () {
-        localStorage.clear();
-        inpEmail.value = "";
-        inpPassword.value = "";
-    }
     
-    // this.loginEvant = function () {
-    //     loginBtn.addEventListener("click", () => {
-    //         this.initValidator();
-    //     });
-    // }
 
-    // this.initValidator = function () {
-    //     if (checkFields()) {
-    //         this.setUserIsAutorized();
-    //         this.showHideBlock(this.galleryDiv, this.loginForm);
-    //         this.exitEvent();
-    //         //setFormData();
-    //     } else {
-    //         showMessage(errorMessArr);
-    //     }
-    // }
-
-    /* hidePass.addEventListener("click", showHidePassword);*/
+   /* hidePass.addEventListener("click", showHidePassword);*/
 }
 
 

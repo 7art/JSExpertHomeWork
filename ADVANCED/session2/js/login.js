@@ -1,10 +1,41 @@
 let LoginForm = function (validatorModule, galleryModule) {
 	this.loginBtn = document.querySelector("#login-btn");
 	this.exitBtn = document.querySelector("#exit-btn");
+	this.userInfoDiv = document.querySelector("#userInfo");	
+	this.galleryDiv = document.querySelector("#gallery");
+	this.loginFormDiv = document.querySelector("#login-form");
+	this.topMenu = document.querySelector(".nav-pills");
+	//const navPills = document.querySelector(".nav-pills");
 	this.validator = validatorModule;
-	this.galleryDiv = validatorModule.galleryDiv;
-	this.loginForm = validatorModule.loginForm;
 	this.gallery = galleryModule;
+	this.selectedItem = "";	
+
+	this.showTopMenu = function (dNone) {
+		if(dNone){
+			this.topMenu.classList.add('d-none');
+		}else{
+			this.topMenu.classList.remove('d-none');
+		}
+       
+	}
+	
+	this.showHideBlock = function (showBlock) {	
+
+			if (this.selectedItem) {
+				this.selectedItem.classList.remove('d-block');
+				this.selectedItem.classList.add('d-none');
+			}
+			this.selectedItem = showBlock;
+			this.selectedItem.classList.add('d-block');
+			this.selectedItem.classList.remove('d-none');
+	}
+
+	this.clearData = function () {
+        localStorage.clear();
+       // inpEmail.value = "";
+       // inpPassword.value = "";
+    }
+	
 }
 
 LoginForm.prototype = {
@@ -14,9 +45,11 @@ LoginForm.prototype = {
 		});
 	},
 	exitEvent: function () {
-		this.exitBtn.addEventListener("click", () => {
-			this.validator.showHideBlock(this.loginForm, this.galleryDiv, this.exitBtn);
-			this.validator.clearData();
+		this.exitBtn.addEventListener("click", (e) => {
+			e.stopPropagation();
+			this.showHideBlock(this.loginFormDiv);
+			this.showTopMenu(dNone=true);
+			this.clearData();
 			this.loginEvant();
 		});
 	},
@@ -29,7 +62,8 @@ LoginForm.prototype = {
 		}
 	},
 	showContent: function () {
-		this.validator.showHideBlock(this.galleryDiv, this.loginForm, this.exitBtn);
+		this.showHideBlock(this.galleryDiv);
+		this.showTopMenu();
 		this.setActiveTopMenu();
 		this.exitEvent();
 	},
@@ -37,27 +71,33 @@ LoginForm.prototype = {
 		if (this.validator.getUserIsAutorized()) {
 			this.showContent();
 		} else {
+			this.showHideBlock(this.loginFormDiv);
 			this.loginEvant();
 		}
 	},
-	setActiveTopMenu: function () {
-		let selectedItem = "";
-
+	setActiveTopMenu: function () {		
+		let selectedItem = this.topMenu.querySelector(".gallery");
+		console.log(selectedItem);
 		function activeItem(node) {
 			if (selectedItem) {
 				selectedItem.classList.remove('active');
 			}
 			selectedItem = node;
 			selectedItem.classList.add('active');
-		}
-
-		this.topMenu = document.querySelector(".nav-pills");
+			
+		}		
 		this.topMenu.addEventListener("click", (e) => {
 			activeItem(e.target);
+			if(e.target.classList.contains("aboutuser")){
+				this.showHideBlock(this.userInfoDiv);
+			}else{
+				this.showHideBlock(this.galleryDiv);
+			}
 		});
+		
 	},
-
 	showGallery: function () {
 		this.gallery.init();
 	}
+	
 }
