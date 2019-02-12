@@ -8,49 +8,71 @@ let LoginForm = function (validatorModule, galleryModule, userData) {
 	this.topMenu = document.querySelector(".nav-pills");
 	this.hidePassBtn = document.querySelector(".input-group-addon");
 	this.hidePass = document.querySelector(".fa");
-	//this.outEmail = validatorModule.outEmail;
-    this.outPassword = validatorModule.outPassword;
-	//const navPills = document.querySelector(".nav-pills");
+	this.outEmail = document.querySelector("#outEmail");
+	this.outPassword = document.querySelector("#outPassword");
 	this.validator = validatorModule;
 	this.gallery = galleryModule;
-	this.selectedItem = "";
+	this.selectedBlockItem = "";
+	this.selectedMenuItem = "";
 
-	this.showTopMenu = function (dNone) {
-		if (dNone) {
+	this.showActiveMenuItem = function (selectedMenuItem) {
+		if (this.selectedMenuItem) {
+			this.selectedMenuItem.classList.remove('active');
+		}
+		this.selectedMenuItem = selectedMenuItem;
+		this.selectedMenuItem.classList.add('active');
+	}
+
+	let addRemoveDisplayClass = function (node, removeClass, addClass) {
+		node.classList.remove(removeClass);
+		node.classList.add(addClass);
+	}
+
+	this.showHideBlock = function (showBlock) {
+		if (this.selectedBlockItem) {
+			addRemoveDisplayClass(this.selectedBlockItem, "d-block", "d-none");
+		}
+		this.selectedBlockItem = showBlock;
+		addRemoveDisplayClass(this.selectedBlockItem, "d-none", "d-block");
+	}
+
+	this.showHideTopMenu = function (displayNone) {
+		if (displayNone) {
 			this.topMenu.classList.add('d-none');
 		} else {
 			this.topMenu.classList.remove('d-none');
 		}
-
-	}
-
-	this.showHideBlock = function (showBlock) {
-
-		if (this.selectedItem) {
-			this.selectedItem.classList.remove('d-block');
-			this.selectedItem.classList.add('d-none');
-		}
-		this.selectedItem = showBlock;
-		this.selectedItem.classList.add('d-block');
-		this.selectedItem.classList.remove('d-none');
 	}
 
 	this.showHidePassword = function () {
-        if (this.outPassword.type === "text") {
-            this.outPassword.type = "password";
-            this.hidePass.classList.remove('fa-eye');
-            this.hidePass.classList.add('fa-eye-slash');
-        } else {
-            this.outPassword.type = "text";
-            this.hidePass.classList.remove('fa-eye-slash');
-            this.hidePass.classList.add('fa-eye');
-        }
-    }
+		if (this.outPassword.type === "text") {
+			this.outPassword.type = "password";
+			addRemoveDisplayClass(this.hidePass, "fa-eye", "fa-eye-slash");
+		} else {
+			this.outPassword.type = "text";
+			addRemoveDisplayClass(this.hidePass, "fa-eye-slash", "fa-eye");
+		}
+	}
 
-	this.clearData = function () {
+	this.clearLocalStorageData = function () {
 		localStorage.clear();
-		// inpEmail.value = "";
-		// inpPassword.value = "";
+	}
+
+	this.setUserIsAutorized = function () {
+		let date = new Date().getTime();
+		localStorage.setItem("autorizedID", date);
+	}
+
+	this.setUserData = function ({
+		login,
+		password
+	}) {
+		this.outEmail.value = login;
+		this.outPassword.value = password;
+	}
+
+	this.getUserIsAutorized = function () {
+		return localStorage.getItem("autorizedID");
 	}
 
 }
@@ -61,67 +83,55 @@ LoginForm.prototype = {
 			this.initValidator();
 		});
 	},
-	exitEvent: function () {
-		this.exitBtn.addEventListener("click", (e) => {
-			e.stopPropagation();
-			this.showHideBlock(this.loginFormDiv);
-			this.showTopMenu(dNone = true);
-			this.clearData();
-			this.loginEvant();
+	passwordHideEvant: function () {
+		this.hidePassBtn.addEventListener("click", () => {
+			this.showHidePassword();
 		});
 	},
-	passwordEvant: function () {		
-		this.hidePassBtn.addEventListener("click", (e) => {			
-			this.showHidePassword();			
+	activeTopMenuEvant: function () {
+		this.topMenu.addEventListener("click", (e) => {
+			this.showActiveMenuItem(e.target);
+			let target = e.target.getAttribute("data-name");
+			this.showContent(target);
 		});
 	},
 	initValidator: function () {
 		if (this.validator.checkFields(userData)) {
-			this.validator.setUserIsAutorized();
+			this.setUserIsAutorized();
 			this.showContent();
 		} else {
 			this.validator.showMessage(this.validator.errorMessArr);
 		}
 	},
-	showContent: function () {
-		this.showHideBlock(this.galleryDiv);
-		this.showTopMenu();
-		this.setActiveTopMenu();
-		this.passwordEvant();
-		this.exitEvent();
+	showContent: function (target = "gallery") {
+		if (target == "exit") {
+			this.showHideTopMenu(displayNone = true);
+			this.showHideBlock(this.loginFormDiv);
+			this.clearLocalStorageData();
+			location.reload();
+		} else if (target == "gallery") {
+			this.showActiveMenuItem(this.topMenu.querySelector('a[data-name=gallery]'));
+			this.showHideBlock(this.galleryDiv);
+			this.showGallery();
+		} else {
+			this.showHideBlock(this.userInfoDiv);
+			this.setUserData(userData);
+			this.passwordHideEvant();
+			console.log("userinfo");
+		}
+		this.showHideTopMenu();
+		this.activeTopMenuEvant();
 	},
 	initComponent: function () {
-		if (this.validator.getUserIsAutorized()) {
+		if (this.getUserIsAutorized()) {
 			this.showContent();
 		} else {
 			this.showHideBlock(this.loginFormDiv);
 			this.loginEvant();
 		}
 	},
-	setActiveTopMenu: function () {
-		let selectedItem = "";
-
-		function activeItem(node) {
-			if (selectedItem) {
-				selectedItem.classList.remove('active');
-			}
-			selectedItem = node;
-			selectedItem.classList.add('active');
-		}
-		activeItem(this.topMenu.querySelector(".gallery"));
-		this.topMenu.addEventListener("click", (e) => {
-			//e.stopPropagation();
-			activeItem(e.target);
-			if (e.target.classList.contains("aboutuser")) {
-				this.showHideBlock(this.userInfoDiv);
-				this.validator.setUserData(userData);				
-			} else {
-				this.showHideBlock(this.galleryDiv);
-			}
-		});		
-	},
 	showGallery: function () {
-		this.gallery.init();
+		this.gallery.initGallery();
 	}
 
 }

@@ -3,7 +3,7 @@ let userData = {
     password: "admin12345"
 }
 
-let data = [{
+let galleryData = [{
 	url: "desktopwallpapers.org.ua/mini/201203/14858.jpg",
 	name: "CHEVROLET",
 	id : 1,	

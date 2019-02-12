@@ -1,13 +1,7 @@
 "use strict"
 let Validator = function () {
-    // this.galleryDiv = document.querySelector("#gallery");
-    // this.loginFormDiv = document.querySelector("#login-form");
-    //const navPills = document.querySelector(".nav-pills");
-   // this.hidePass = document.querySelector(".fa");
     const inpEmail = document.querySelector("#inputEmail");
     const inpPassword = document.querySelector("#inputPassword");
-    this.outEmail = document.querySelector("#outEmail");
-    this.outPassword = document.querySelector("#outPassword");
     let errorMessArr = [];
     this.errorMessArr = errorMessArr;
 
@@ -16,9 +10,7 @@ let Validator = function () {
         const regEmail = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
         const regPasswd = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]{8,16}$/;
         const inputEmail = inpEmail.value.trim();
-        const inputPassword = inpPassword.value.trim();
-        //let login = userData.login;
-       // let password = userData.password;
+        const inputPassword = inpPassword.value.trim();        
         let valid = false;
 
         errorMessArr.length = 0;
@@ -66,22 +58,7 @@ let Validator = function () {
 
         return valid;
 
-    }
-
-
-    this.setUserIsAutorized = function () {
-        let date = new Date().getTime();
-        localStorage.setItem("autorizedID", date);
-    }
-
-    this.setUserData = function ({login, password}) {
-        this.outEmail.value = login;
-        this.outPassword.value = password;        
-    }
-
-    this.getUserIsAutorized = function () {
-        return localStorage.getItem("autorizedID");
-    }
+    }    
 
     this.showMessage = function (arr) {
         const alerts = document.querySelector(".alerts");
@@ -99,7 +76,7 @@ let Validator = function () {
 
 let validatorModule = new Validator();
 
-let galleryModule = new BaseGallery();
+let galleryModule = new BaseGallery(galleryData);
 //let galleryModule = new ExtendedGallery();
 
 let loginForm = new LoginForm(validatorModule, galleryModule, userData);
