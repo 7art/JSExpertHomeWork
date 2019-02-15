@@ -55,7 +55,7 @@
         <h1 class="jumbotron-heading">Автомобильная галлерея</h1>
         <p class="lead text-muted">На этой странице вы можете увидеть отличную галлерею, которая дает вам возможность
           ознакомится с нашим каталогом транспортных средств. </p>
-        <div class="row d-none">
+        <div class="row" id="filter">
           <div class="col-md-6">
 
             <div class="btn-group" id="dropdown-name">
@@ -64,8 +64,8 @@
                 Фильтровать по имени
               </button>
               <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Вперед: от А до Я</a>
-                <a class="dropdown-item" href="#">Назад: от Я до А</a>
+                <a class="dropdown-item" data-type="0" href="#">Вперед: от А до Я</a>
+                <a class="dropdown-item" data-type="1" href="#">Назад: от Я до А</a>
               </div>
             </div>
           </div>
@@ -77,15 +77,14 @@
                 Фильтровать по дате
               </button>
               <div class="dropdown-menu">
-                <a class="dropdown-item" date-type="new" href="#">Сначала новые</a>
-                <a class="dropdown-item" date-type="old" href="#">Сначала старые</a>
+                <a class="dropdown-item" data-type="2" href="#">Сначала новые</a>
+                <a class="dropdown-item" data-type="3" href="#">Сначала старые</a>
               </div>
             </div>
           </div>
 
 
-        </div>
-
+        </div>      
       </div>
     </section>
 
@@ -94,10 +93,9 @@
     <div class="album py-5 bg-light">
       <div class="container">
         <div class="row text-center" id="mainGallery"></div>
-        <div class="text-center d-none">
-          <a href="#" id="next-page" class="btn btn-primary my-2">Добавить картинку</a>
+        <div class="text-center pt-3">
+          <button type="button" id="additem" class="btn btn-primary my-2">Добавить картинку</button>
         </div>
-
       </div>
     </div>
   </main>
@@ -156,5 +154,12 @@
     crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
 
-  <script src=js/data.js> </script> <script src=js/login.js> </script> <script src=js/gallery.js> </script> <script src=js/main.js>
-    </script> </body> </html>
+  <script src=js/data.js> </script> 
+  <script src=js/validator.js> </script>
+  <script src=js/userpage.js> </script>  
+  <script src=js/login.js> </script>  
+  <script src=js/gallery.js> </script> 
+  <script src=js/main.js>
+    </script> 
+    </body> 
+    </html>

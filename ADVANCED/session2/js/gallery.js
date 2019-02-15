@@ -1,48 +1,53 @@
-/* 
- *  Схематическое изображение класса Галереи
- */
+let BaseGallery = function () {
 
-let BaseGallery = function (galleryData) {
-
-	//   sortTypeSelectbox = document.getElementById("sort-type")	
+	this.sortTypeSelectbox = document.querySelector("#filter");
+	this.addBtn = document.querySelector("#additem");
 	this.mainDiv = document.getElementById("mainGallery");
-	//let hiddenGalleryItems = [];
+	this.hiddenGalleryItems = [];
+	this.displayedGalleryItems = [];
+	this.sortType = "0";
 
-	this.cutString = function (str) {
-		return str.length >= 50 ? str.substring(0, 50) : str;
+	this.setToggleButton = function (array) {
+		if (galleryData.length === array.length) {
+			this.addBtn.setAttribute("disabled", "");
+		} else {
+			this.addBtn.removeAttribute("disabled");
+		}
 	}
 
-	this.addHttp = function (str) {
-		return str.startsWith("http://") ? str : "http://" + str;
+	this.setSortType = function () {
+		let sortTypeFromStorage = localStorage.getItem("sortType");
+
+		if (sortTypeFromStorage) {
+			this.sortType = sortTypeFromStorage;
+		}
 	}
 
-	this.formatDate = function (date) {
-		return moment(date).format("YYYY/MM/DD HH:mm");
+	this.setStorageData = function () {
+		localStorage.setItem("hData", JSON.stringify(this.hiddenGalleryItems));
+		localStorage.setItem("sData", JSON.stringify(this.displayedGalleryItems));
+		localStorage.setItem("sortType", this.sortType);
 	}
 
-	this.prepareData = function (data) {
-		return data.map(item => {
-			return {
-				url: this.addHttp(item.url),
-				id: item.id,
-				name: item.name,
-				description: this.cutString(item.description),
-				date: item.date
-			};
-		});
+	this.getStorageData = function () {
+		let hDataFromStorage = JSON.parse(localStorage.getItem("hData"));
+		let sDataFromStorage = JSON.parse(localStorage.getItem("sData"));
+		this.hiddenGalleryItems = !hDataFromStorage ? utilite.prepareData(galleryData) : hDataFromStorage;
+		if (sDataFromStorage) {
+			this.displayedGalleryItems = sDataFromStorage;
+			this.buildGallery(this.displayedGalleryItems);
+		}
 	}
-
-	this.displayedGalleryItems = this.prepareData(galleryData);
 }
 
 BaseGallery.prototype = {
 	initGallery: function () {
-		this.buildGallery(this.prepareData(this.displayedGalleryItems));
-		this.deleteItemEvant();
+		this.getStorageData();
+		this.setSortType();
 	},
 	buildGallery: function (array) {
 		let resultHtml = "";
-		array.forEach(item => {
+		array.forEach((item) => {
 			resultHtml += `<div class="col-md-4">
 			<div class="card mb-4 box-shadow">
 				<img class="card-img-top" alt="${item.name}" src="${item.url}" data-holder-rendered="true"
@@ -51,12 +56,12 @@ BaseGallery.prototype = {
 					<h5 class="card-title">${item.name}</h5>
 					<p class="card-text">${item.description}</p>
 					<div class="d-flex justify-content-between align-items-center">
-						<div class="btn-group">
+						<div class="btn-group d-none">
 							<button type="button" class="btn btn-outline-secondary">View</button>
 							<button type="button" class="btn btn-outline-secondary">Edit</button>
 						</div>
 						<div href="#" class="btn btn-danger" data-id="${item.id}">Удалить</div>
-						<small class="text-muted">${this.formatDate(item.date)}</small>
+						<small class="text-muted">${utilite.formatDate(item.date)}</small>
 					</div>
 				</div>
 			</div>
@@ -64,45 +69,89 @@ BaseGallery.prototype = {
 		});
 		this.mainDiv.innerHTML = resultHtml;
 	},
-	deleteItemEvant: function () {
-		this.mainDiv.addEventListener("click", (e) => {
-			this.removeOneItem(e);
-		});
-	},
-	removeOneItem: function (e) {
-		const movedItemId = +e.target.getAttribute("data-id");
-		if (movedItemId) {
-			//   let movedItem = displayedGalleryItems.filter(item => {
-			// 	return item.id === movedItemId;
-			//   });
-			// hiddenGalleryItems = hiddenGalleryItems.concat(movedItem);
-			this.displayedGalleryItems = this.displayedGalleryItems.filter(item => {
-				return item.id !== movedItemId;
-			});
-			//  setToggleButton(displayedGalleryItems);
-			//  buildGallery(displayedGalleryItems);
-			this.buildGallery(this.displayedGalleryItems);
+	sortData: function (data, value) {
+		data = data.sort((a, b) => a.name.localeCompare(b.name));
+		switch (+value) {
+			case 1:
+				return data.reverse();
+			case 2:
+				return data.sort((a, b) => Number(b.date) - Number(a.date));
+			case 3:
+				return data.sort((a, b) => Number(a.date) - Number(b.date));
+			case 0:
+			default:
+				return data;
 		}
+	},
+	sortItems: function (sortType) {
+		this.sortType = sortType;
+		this.displayedGalleryItems = this.sortData(this.displayedGalleryItems, sortType);
+		console.log(this.displayedGalleryItems);
+		this.buildGallery(this.displayedGalleryItems);
 	}
-
 }
 
-
-let ExtendedGallery = function () {
+let ExtendedGallery = function (galleryData) {
 	BaseGallery.apply(this);
 	this.property = {};
 }
+
 ExtendedGallery.prototype = {
-
-	initListeners: function () {
-		BaseGallery.prototype.initListeners.apply(this);
-	},
-
 	addImage: function () {
-		// новый метод которо нет у родителя
+		console.log("addImage");
+		this.displayedGalleryItems = this.displayedGalleryItems.concat(
+			this.hiddenGalleryItems.splice(0, 1)
+		);
+		this.setToggleButton(this.displayedGalleryItems);
+		this.buildGallery(this.displayedGalleryItems);
+	},
+	removeImage: function (e) {
+		const movedItemId = +e.target.getAttribute("data-id");
+		if (movedItemId) {
+			let movedItem = this.displayedGalleryItems.filter(item => {
+				return item.id === movedItemId;
+			});
+			this.hiddenGalleryItems = this.hiddenGalleryItems.concat(movedItem);
+			this.displayedGalleryItems = this.displayedGalleryItems.filter(item => {
+				return item.id !== movedItemId;
+			});
+			this.setToggleButton(this.displayedGalleryItems);
+			this.buildGallery(this.displayedGalleryItems);
+		}
 	}
 }
 
-// код функции наследования можно найти архиве, который содержится 
-// в материалах к сессии 29 (практический пример)
-//service.inheritance(BaseGallery, ExtendedGallery);
+const utilite = {
+	cutString: function (str) {
+		return str.length >= 50 ? str.substring(0, 50) : str;
+	},
+	addHttp: function (str) {
+		return str.startsWith("http://") ? str : "http://" + str;
+	},
+	formatDate: function (date) {
+		return moment(date).format("YYYY/MM/DD HH:mm");
+	},
+	prepareData: function (data) {
+		return data.map(item => {
+			return {
+				url: utilite.addHttp(item.url),
+				id: item.id,
+				name: item.name,
+				description: utilite.cutString(item.description),
+				date: item.date
+			};
+		});
+	},
+	inheritance: function (parent, child) {
+		let tempChild = child.prototype;
+		child.prototype = Object.create(parent.prototype);
+		child.prototype.constructor = child;
+		for (let key in tempChild) {
+			if (tempChild.hasOwnProperty(key)) {
+				child.prototype[key] = tempChild[key];
+			}
+		}
+	}
+}
+
+utilite.inheritance(BaseGallery, ExtendedGallery);
