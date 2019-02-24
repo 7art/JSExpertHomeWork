@@ -83,6 +83,7 @@ BaseGallery.prototype = {
 				return data;
 		}
 	},
+	
 	sortItems: function (sortType) {
 		this.sortType = sortType;
 		this.displayedGalleryItems = this.sortData(this.displayedGalleryItems, sortType);
@@ -92,8 +93,7 @@ BaseGallery.prototype = {
 }
 
 let ExtendedGallery = function (galleryData) {
-	BaseGallery.apply(this);
-	this.property = {};
+	BaseGallery.apply(this);	
 }
 
 ExtendedGallery.prototype = {

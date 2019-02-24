@@ -34,11 +34,11 @@ let LoginForm = function (validatorModule, galleryModule, userPageModule, userDa
 			this.topMenu.classList.add('d-none');
 		} else {
 			this.topMenu.classList.remove('d-none');
-		}	
+		}
 	}
 
 	this.clearLocalStorageData = function () {
-		localStorage.clear();		
+		localStorage.clear();
 	}
 
 	this.getUserIsAutorized = function () {
@@ -48,7 +48,7 @@ let LoginForm = function (validatorModule, galleryModule, userPageModule, userDa
 }
 
 LoginForm.prototype = {
-	initEvant: function () {		
+	initEvant: function () {
 		this.loginBtn.addEventListener("click", () => {
 			this.initValidator();
 		});
@@ -68,17 +68,17 @@ LoginForm.prototype = {
 		});
 		this.gallery.sortTypeSelectbox.addEventListener("click", (e) => {
 			if (e.target.dataset.type) {
-				this.gallery.sortItems(e.target.dataset.type);				
-			}			
+				this.gallery.sortItems(e.target.dataset.type);
+			}
 		});
 		window.addEventListener("beforeunload", () => {
-			if(this.getUserIsAutorized()){
+			if (this.getUserIsAutorized()) {
 				this.gallery.setStorageData();
-			}			
+			}
 		})
 
 	},
-	initValidator: function () {	
+	initValidator: function () {
 		if (this.validator.checkFields(this.userData)) {
 			this.userPage.setUserIsAutorized();
 			this.showContent();
@@ -87,21 +87,42 @@ LoginForm.prototype = {
 		}
 	},
 	showContent: function (target = "gallery") {
-		if (target == "exit") {
-			this.showHideTopMenu(displayNone = true);
-			this.showHideBlock(this.loginFormDiv);
-			this.clearLocalStorageData();
-			this.userPage.clearFields();			
-		} else if (target == "gallery") {
-			this.showActiveMenuItem(this.topMenu.querySelector('a[data-name=gallery]'));
-			this.showHideBlock(this.galleryDiv);
-			this.showHideTopMenu();
-			this.showGallery();
-		} else {
-			this.showHideBlock(this.userInfoDiv);
-			this.userPage.setUserData(this.userData);
-			this.showHideTopMenu();
-			this.gallery.setStorageData();
+		// if (target == "exit") {
+		// 	this.showHideTopMenu(displayNone = true);
+		// 	this.showHideBlock(this.loginFormDiv);
+		// 	this.clearLocalStorageData();
+		// 	this.userPage.clearFields();			
+		// } else if (target == "gallery") {
+		// 	this.showActiveMenuItem(this.topMenu.querySelector('a[data-name=gallery]'));
+		// 	this.showHideBlock(this.galleryDiv);
+		// 	this.showHideTopMenu();
+		// 	this.showGallery();
+		// } else {
+		// 	this.showHideBlock(this.userInfoDiv);
+		// 	this.userPage.setUserData(this.userData);
+		// 	this.showHideTopMenu();
+		// 	this.gallery.setStorageData();
+		// }
+
+		switch (target) {
+			case "exit":
+				this.showHideTopMenu(displayNone = true);
+				this.showHideBlock(this.loginFormDiv);
+				this.clearLocalStorageData();
+				this.userPage.clearFields();
+				break;
+			case "gallery":
+				this.showActiveMenuItem(this.topMenu.querySelector('a[data-name=gallery]'));
+				this.showHideBlock(this.galleryDiv);
+				this.showHideTopMenu();
+				this.showGallery();
+				break;
+			case "aboutuser":
+				this.showHideBlock(this.userInfoDiv);
+				this.userPage.setUserData(this.userData);
+				this.showHideTopMenu();
+				this.gallery.setStorageData();
+				break;
 		}
 	},
 	initComponent: function () {
