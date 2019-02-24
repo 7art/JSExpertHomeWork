@@ -1,0 +1,43 @@
+{
+  "cars": [
+    {
+      "url": "desktopwallpapers.org.ua/mini/201507/40069.jpg",
+      "name": "CHEVROLET",
+      "id": 1,
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "date": 1422153200637
+    },
+    {
+      "url": "desktopwallpapers.org.ua/mini/201507/40068.jpg",
+      "name": "DEWOO",
+      "id": 2,
+      "description": "Lorem ipsum dolor sit amet",
+      "date": 1421153200637
+    },
+    {
+      "url": "desktopwallpapers.org.ua/mini/201507/40067.jpg",
+      "name": "FOLKSWAGEN",
+      "id": 3,
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "date": 1426153200637
+    },
+    {
+      "url": "desktopwallpapers.org.ua/mini/201507/40057.jpg",
+      "name": "FERRARI",
+      "id": 4,
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "date": 1428153200637
+    },
+    {
+      "url": "desktopwallpapers.org.ua/mini/201507/40069.jpg",
+      "name": "RENO-MEGAN",
+      "id": 5,
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "date": 1422153200637
+    }
+  ],
+  "user": {
+    "login": "admin",
+    "password": "12345"
+  }
+}
