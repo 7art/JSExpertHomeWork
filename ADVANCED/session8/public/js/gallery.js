@@ -7,10 +7,11 @@ class BaseGallery {
 		this.mainDiv = document.getElementById("mainGallery");
 		this.hiddenGalleryItems = [];
 		this.displayedGalleryItems = [];
+		this.galleryData = null;
 		this.sortType = "0";
 	}
 	setToggleButton(array) {
-		if (galleryData.length === array.length) {
+		if (this.galleryData.length === array.length) {
 			this.addBtn.setAttribute("disabled", "");
 		} else {
 			this.addBtn.removeAttribute("disabled");
@@ -27,7 +28,8 @@ class BaseGallery {
 		localStorage.setItem("sData", JSON.stringify(this.displayedGalleryItems));
 		localStorage.setItem("sortType", this.sortType);
 	};
-	getStorageData() {
+	getStorageData(galleryData) {
+		console.log(galleryData);
 		let hDataFromStorage = JSON.parse(localStorage.getItem("hData"));
 		let sDataFromStorage = JSON.parse(localStorage.getItem("sData"));
 		this.hiddenGalleryItems = !hDataFromStorage ? utilite.prepareData(galleryData) : hDataFromStorage;
@@ -37,8 +39,18 @@ class BaseGallery {
 		}
 	};
 	initGallery() {
-		this.getStorageData();
-		this.setSortType();
+		fetch("http://localhost:3000/cars").then(responce => responce.json())
+			.then(data => {
+				//this.saveData(data);
+				this.galleryData = data;
+				//console.log(this.galleryData);
+				this.getStorageData(this.galleryData);
+				this.setSortType();
+			});
+
+	};
+	saveData(data) {
+		this.galleryData = data;
 	};
 	buildGallery(array) {
 		let resultHtml = "";
@@ -90,7 +102,7 @@ class BaseGallery {
 		event.preventDefault();
 		event.currentTarget.querySelector("button").innerHTML = event.target.innerText;
 		let sortType = event.target.getAttribute("data-type");
-		if (sortType) {			
+		if (sortType) {
 			this.sortType = sortType;
 			this.displayedGalleryItems = this.sortData(this.displayedGalleryItems, sortType);
 			this.buildGallery(this.displayedGalleryItems);
