@@ -32,18 +32,17 @@ class LoginForm {
 		this.gallery.addBtn.addEventListener("click", () => {
 			this.gallery.addImage();
 		});
-		this.gallery.sortTypeSelectbox.addEventListener("click", (e) => {
-			if (e.target.dataset.type) {
-				this.gallery.sortItems(e.target.dataset.type);
-				this.gallery.sortingHandler(e);
-			}
+		this.gallery.sortTypeByName.addEventListener("click", (e) => {
+			this.gallery.sortingHandler(e);
+		});
+		this.gallery.sortTypeByDate.addEventListener("click", (e) => {
+			this.gallery.sortingHandler(e);
 		});
 		window.addEventListener("beforeunload", () => {
 			if (this.isUserAutorized()) {
 				this.gallery.setStorageData();
 			}
 		})
-
 	};
 	initComponent() {
 		if (!this.isUserAutorized()) {
@@ -83,7 +82,7 @@ class LoginForm {
 				this.gallery.setStorageData();
 				break;
 		}
-	};	
+	};
 	showActiveMenuItem(selectedMenuItem) {
 		if (this.selectedMenuItem) {
 			this.selectedMenuItem.classList.remove('active');

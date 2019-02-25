@@ -1,6 +1,8 @@
 class BaseGallery {
 	constructor() {
-		this.sortTypeSelectbox = document.querySelector("#filter");
+		//this.sortTypeSelectbox = document.querySelector("#filter");
+		this.sortTypeByName = document.querySelector("#dropdown-name");
+		this.sortTypeByDate = document.querySelector("#dropdown-date");
 		this.addBtn = document.querySelector("#additem");
 		this.mainDiv = document.getElementById("mainGallery");
 		this.hiddenGalleryItems = [];
@@ -77,16 +79,25 @@ class BaseGallery {
 		}
 	};
 
-	sortItems(sortType) {
+	applySortingMethod(sortType) {
+		console.log(sortType);
 		this.sortType = sortType;
 		this.displayedGalleryItems = this.sortData(this.displayedGalleryItems, sortType);
 		this.buildGallery(this.displayedGalleryItems);
 	}
 
-	sortingHandler(event){
+	sortingHandler(event) {
 		event.preventDefault();
 		event.currentTarget.querySelector("button").innerHTML = event.target.innerText;
+		let sortType = event.target.getAttribute("data-type");
+		if (sortType) {			
+			this.sortType = sortType;
+			this.displayedGalleryItems = this.sortData(this.displayedGalleryItems, sortType);
+			this.buildGallery(this.displayedGalleryItems);
+		}
 	}
+
+
 }
 
 class ExtendedGallery extends BaseGallery {
@@ -94,7 +105,7 @@ class ExtendedGallery extends BaseGallery {
 		super();
 	}
 
-	addImage() {		
+	addImage() {
 		this.displayedGalleryItems = this.displayedGalleryItems.concat(
 			this.hiddenGalleryItems.splice(0, 1)
 		);
@@ -116,4 +127,3 @@ class ExtendedGallery extends BaseGallery {
 		}
 	}
 }
-
