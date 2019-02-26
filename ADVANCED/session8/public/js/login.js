@@ -5,7 +5,8 @@ class LoginForm {
 		this.exitBtn = document.querySelector("#exit-btn");
 		this.userInfoDiv = document.querySelector("#userInfo");
 		this.galleryDiv = document.querySelector("#gallery");
-		this.loginFormDiv = document.querySelector("#login-form");
+		this.loginFormDiv = document.querySelector("#loginform");
+		this.addItemDiv = document.querySelector("#addimage");
 		this.topMenu = document.querySelector(".nav-pills");
 		this.hidePassBtn = document.querySelector(".input-group-addon");
 		this.validator = validatorModule;
@@ -24,12 +25,18 @@ class LoginForm {
 		this.topMenu.addEventListener("click", (e) => {
 			this.showActiveMenuItem(e.target);
 			let target = e.target.getAttribute("data-name");
-			this.showContent(target);
+			this.targetHandler(target);
 		});
 		this.gallery.mainDiv.addEventListener("click", (e) => {
 			this.gallery.removeImage(e);
 		});
+		// this.gallery.addBtn.addEventListener("click", () => {
+		// 	this.gallery.addImage();
+		// });
 		this.gallery.addBtn.addEventListener("click", () => {
+			this.showSelectedBlock(this.addItemDiv);
+		});
+		this.gallery.saveBtn.addEventListener("click", () => {
 			this.gallery.addImage();
 		});
 		this.gallery.sortTypeByName.addEventListener("click", (e) => {
@@ -50,18 +57,18 @@ class LoginForm {
 			this.showSelectedBlock(this.loginFormDiv);
 		} else {
 			this.initEvant();
-			this.showContent();
+			this.targetHandler();
 		}
 	};
 	initValidator() {
 		if (this.validator.checkFields(this.userData)) {
 			this.userPage.setUserIsAutorized();
-			this.showContent();
+			this.targetHandler();
 		} else {
 			this.validator.showMessage(this.validator.errorMessArr);
 		}
 	};
-	showContent(target = "gallery") {
+	targetHandler(target = "gallery") {
 		switch (target) {
 			case "exit":
 				this.showHideTopMenu(true);
@@ -95,7 +102,7 @@ class LoginForm {
 			utilite.switchCssClass(this.selectedBlockItem, "d-block", "d-none");
 		}
 		this.selectedBlockItem = showBlock;
-		utilite.switchCssClass(this.selectedBlockItem, "d-none", "d-block");
+		utilite.switchCssClass(this.selectedBlockItem, "d-none", "d-block");		
 	};
 	showHideTopMenu(displayNone) {
 		if (displayNone) {
