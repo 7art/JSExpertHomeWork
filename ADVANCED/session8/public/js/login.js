@@ -26,30 +26,26 @@ class LoginForm {
 			this.showActiveMenuItem(e.target);
 			let target = e.target.getAttribute("data-name");
 			this.targetHandler(target);
-		});
-		this.gallery.mainDiv.addEventListener("click", (e) => {
-			this.gallery.removeImage(e);
-		});
-		// this.gallery.addBtn.addEventListener("click", () => {
-		// 	this.gallery.addImage();
-		// });
+		});		
 		this.gallery.addBtn.addEventListener("click", () => {
 			this.showSelectedBlock(this.addItemDiv);
 		});
+		this.gallery.mainDiv.addEventListener("click", (e) => {
+			if(e.target.type === "button"){
+				this.gallery.editItem(e);
+			} else {
+				this.gallery.removeItem(e);
+			}			
+		});		
 		this.gallery.saveBtn.addEventListener("click", () => {
-			this.gallery.addImage();
+			this.gallery.addItem();
 		});
 		this.gallery.sortTypeByName.addEventListener("click", (e) => {
 			this.gallery.sortingHandler(e);
 		});
 		this.gallery.sortTypeByDate.addEventListener("click", (e) => {
 			this.gallery.sortingHandler(e);
-		});
-		window.addEventListener("beforeunload", () => {
-			if (this.isUserAutorized()) {
-				this.gallery.setStorageData();
-			}
-		})
+		});		
 	};
 	initComponent() {
 		if (!this.isUserAutorized()) {
@@ -85,8 +81,7 @@ class LoginForm {
 			case "aboutuser":
 				this.showSelectedBlock(this.userInfoDiv);
 				this.userPage.setUserData(this.userData);
-				this.showHideTopMenu();
-				this.gallery.setStorageData();
+				this.showHideTopMenu();				
 				break;
 		}
 	};

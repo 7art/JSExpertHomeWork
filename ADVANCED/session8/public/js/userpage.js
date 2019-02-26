@@ -36,22 +36,26 @@ const utilite = {
 		return str.length >= 50 ? str.substring(0, 50) : str;
 	},
 	addHttp: function (str) {
-		return str.startsWith("http://") ? str : "http://" + str;
+		const regtpl = /^ht\w{2,4}:\/\//;
+		return regtpl.test(str) ? str : "http://" + str;
 	},
 	formatDate: function (date) {
 		return moment(date).format("YYYY/MM/DD HH:mm");
+	},
+	capitalize: function (str) {
+		return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 	},
 	prepareData: function (data) {
 		return data.map(item => {
 			return {
 				url: utilite.addHttp(item.url),
 				id: item.id,
-				name: item.name,
+				name: utilite.capitalize(item.name),
 				description: utilite.cutString(item.description),
 				date: item.date
 			};
 		});
-	},	
+	},
 	switchCssClass: function (node, removeClass, addClass) {
 		node.classList.remove(removeClass);
 		node.classList.add(addClass);
