@@ -2,18 +2,20 @@ class BaseGallery {
 	constructor() {
 		this.sortTypeByName = document.querySelector("#dropdown-name");
 		this.sortTypeByDate = document.querySelector("#dropdown-date");
-		this.addBtn = document.querySelector("#additem");
+		this.addItemBtn = document.querySelector("#add-item-btn");
 		this.mainDiv = document.getElementById("mainGallery");
-		this.saveBtn = document.querySelector("#save");
-		this.editBtn = document.querySelector("#save");
+		this.saveBtn = document.querySelector("#save-new-item");
+		this.editBtn = document.querySelector("#save-edited-item");
+		this.viewItemBtn = document.querySelector(".assignmentbtn");
+		this.formTitle = document.querySelector("#formtitle");
 		this.galleryData = null;
 		this.carsUrl = "http://localhost:3000/cars";
 	}
 	setToggleButton(array) {
 		if (this.galleryData.length === array.length) {
-			this.addBtn.setAttribute("disabled", "");
+			this.addItemBtn.setAttribute("disabled", "");
 		} else {
-			this.addBtn.removeAttribute("disabled");
+			this.addItemBtn.removeAttribute("disabled");
 		}
 	};
 
@@ -38,9 +40,9 @@ class BaseGallery {
 					<div class="d-flex justify-content-between align-items-center">
 						<div class="btn-group">
 							<!--<button type="button" class="btn btn-outline-secondary">View</button>-->
-							<button type="button" class="btn btn-outline-secondary" id="editbtn" data-id="${item.id}">Edit</button>
+							<button type="button" class="btn btn-outline-secondary" id="editbtn" data-open-item="true" data-id="${item.id}">Edit</button>
 						</div>
-						<div href="#" class="btn btn-danger" data-id="${item.id}">Удалить</div>
+						<button href="#" class="btn btn-danger" data-remove-item="true" data-id="${item.id}">Удалить</button>
 						<small class="text-muted">${utilite.formatDate(item.date)}</small>
 					</div>
 				</div>
@@ -50,7 +52,6 @@ class BaseGallery {
 		this.mainDiv.innerHTML = resultHtml;
 	};
 	sortData(data, value) {
-
 		data = data.sort((a, b) => a.name.localeCompare(b.name));
 		switch (+value) {
 			case 1:
@@ -83,11 +84,16 @@ class ExtendedGallery extends BaseGallery {
 		this.description = document.getElementById('newdescript');
 		this.imgUrl = document.getElementById('newimgurl');
 	}
-
-	addItem() {
+	viewEmptyForm() {
+		loginForm.showSelectedBlock(loginForm.viewItemDiv);
+		this.viewItemBtn.setAttribute("data-assignment", "save-new");		
+		this.formTitle.innerHTML = "Добавить новый элемент";
+	};
+	saveNewItem() {
 		let name = this.name.value;
 		let description = this.description.value;
 		let imgUrl = this.imgUrl.value;
+
 		if (name && description && imgUrl) {
 			let newdate = new Date();
 			let newItem = {
@@ -104,7 +110,7 @@ class ExtendedGallery extends BaseGallery {
 					},
 					body: JSON.stringify(newItem)
 				}).then(responce => responce.json())
-				.then(data => {
+				.then(() => {
 					loginForm.showSelectedBlock(loginForm.galleryDiv);
 					this.clearForm();
 					super.initGallery();
@@ -116,24 +122,55 @@ class ExtendedGallery extends BaseGallery {
 	removeItem(e) {
 		const movedItemId = +e.target.getAttribute("data-id");
 		if (movedItemId) {
-			fetch(this.carsUrl + "/" + movedItemId, {
+			fetch(`${this.carsUrl}/${movedItemId}`, {
 					method: 'delete'
 				}).then(responce => responce.json())
-				.then(data => {
+				.then(() => {
 					super.initGallery();
 				});
 		}
 	};
-	editItem(e) {
-		const editItemId = +e.target.getAttribute("data-id");	
+	viewItem(e) {
+		const editItemId = +e.target.getAttribute("data-id");
 		fetch(this.carsUrl + "/" + editItemId).then(responce => responce.json())
 			.then(data => {
-				console.log(data);
+				loginForm.showSelectedBlock(loginForm.viewItemDiv);
 				this.name.value = data.name;
 				this.description.value = data.description;
 				this.imgUrl.value = data.url;
-				loginForm.showSelectedBlock(loginForm.addItemDiv);				
-			});		
+				this.viewItemBtn.setAttribute("data-assignment", "edit-item");
+				this.viewItemBtn.setAttribute("data-id", data.id);
+				this.formTitle.innerHTML = "Редактировать элемент";
+			});
+	};
+	saveEditedItem(e) {
+		let name = this.name.value;
+		let description = this.description.value;
+		let imgUrl = this.imgUrl.value;
+		if (name && description && imgUrl) {
+			let editItem = {
+				url: imgUrl,
+				name: name,
+				description: description
+			}
+			const editItemId = +e.target.getAttribute("data-id");
+			fetch(this.carsUrl + "/" + editItemId, {
+					method: 'PUT',
+					headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(editItem)
+				}).then(responce => responce.json())
+				.then(() => {
+					loginForm.showSelectedBlock(loginForm.galleryDiv);
+					this.clearForm();
+					super.initGallery();
+					validatorModule.showMessage(["Изменения сохранены!"]);
+				});
+		} else {
+			validatorModule.showMessage(["Все поля обязательны для заполнения!"]);
+		}
 	};
 	clearForm() {
 		this.name.value = "";

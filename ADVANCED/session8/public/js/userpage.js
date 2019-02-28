@@ -59,6 +59,5 @@ const utilite = {
 	switchCssClass: function (node, removeClass, addClass) {
 		node.classList.remove(removeClass);
 		node.classList.add(addClass);
-	}
-
+	}	
 }
