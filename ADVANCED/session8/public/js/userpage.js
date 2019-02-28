@@ -18,10 +18,7 @@ class UserPage {
 		let date = new Date().getTime();
 		localStorage.setItem("autorizedID", date);
 	};
-	setUserData({
-		login,
-		password
-	}) {
+	setUserData(login, password) {
 		this.outEmail.value = login;
 		this.outPassword.value = password;
 	};

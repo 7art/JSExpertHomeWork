@@ -1,6 +1,6 @@
 class LoginForm {
-	constructor(validatorModule, galleryModule, userPageModule, userData) {
-		this.userData = userData;
+	constructor(validatorModule, galleryModule, userPageModule) {
+		
 		this.loginBtn = document.querySelector("#login-btn");
 		this.exitBtn = document.querySelector("#exit-btn");
 		this.userInfoDiv = document.querySelector("#userInfo");
@@ -14,6 +14,11 @@ class LoginForm {
 		this.userPage = userPageModule;
 		this.selectedBlockItem = null;
 		this.selectedMenuItem = null;
+		this.login = validatorModule.inpEmail;
+		this.password = validatorModule.inpPassword;
+		
+
+		this.loginUrl = "http://localhost:3000/login";
 	}
 	initEvant() {
 		this.loginBtn.addEventListener("click", () => {
@@ -63,10 +68,29 @@ class LoginForm {
 		}
 	};
 	initValidator() {
-		if (this.validator.checkFields(this.userData)) {
-			this.userPage.setUserIsAutorized();
-			this.showTopMenu();
-			this.targetHandler();
+		if (this.validator.checkFields()) {
+			let userData = {
+				login: this.login.value,
+				password: this.password.value
+			};
+			fetch(this.loginUrl, {
+					method: 'POST',
+					headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(userData)
+				}).then(responce => responce.json())
+				.then((data) => {
+					//console.log(data);
+					if (data.status == true) {
+						this.userPage.setUserIsAutorized();
+						this.showTopMenu();
+						this.targetHandler();
+					} else {
+						validatorModule.showMessage(["Введен неверный  логин или пароль!"]);
+					}
+				});
 		} else {
 			this.validator.showMessage(this.validator.errorMessArr);
 		}
@@ -81,12 +105,12 @@ class LoginForm {
 				break;
 			case "gallery":
 				this.showActiveMenuItem(this.topMenu.querySelector('a[data-name=gallery]'));
-				this.showSelectedBlock(this.galleryDiv);				
+				this.showSelectedBlock(this.galleryDiv);
 				this.showGallery();
 				break;
 			case "aboutuser":
 				this.showSelectedBlock(this.userInfoDiv);
-				this.userPage.setUserData(this.userData);				
+				this.userPage.setUserData(this.login.value, this.password.value);				
 				break;
 		}
 	};
