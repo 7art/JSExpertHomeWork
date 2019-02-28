@@ -2,33 +2,28 @@ const jsonServer = require('json-server')
 const server = jsonServer.create()
 const router = jsonServer.router('db.json')
 const middlewares = jsonServer.defaults()
-
+const low = require('lowdb')
+const db = low('db.json')
 // Set default middlewares (logger, static, cors and no-cache)
 server.use(middlewares)
 
 // Add custom routes before JSON Server router
 server.use(jsonServer.bodyParser)
 server.post('/login', (req, res) => {
-    console.log(req.body.login);
-    if(req.body.login == "admin"){
-        res.jsonp({status:true})
+    var user = db.get("user").value()
+    if (req.body.login == user.login && req.body.password == user.password) {
+        res.jsonp({
+            status: true
+        })
     } else {
-        res.sendStatus(401);
+        res.jsonp({
+            status: false
+        })
     }
 })
-
-// To handle POST, PUT and PATCH you need to use a body-parser
-// You can use the one used by JSON Server
-// server.use((req, res, next) => {
-//   if (req.method === 'POST') {
-//     req.body.createdAt = Date.now()
-//   }
-//   // Continue to JSON Server router
-//   next()
-// })
 
 // Use default router
 server.use(router)
 server.listen(3000, () => {
-  console.log('JSON Server is running')
+    console.log('JSON Server is running')
 })
