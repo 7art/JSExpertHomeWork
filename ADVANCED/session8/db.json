@@ -10,8 +10,9 @@
     {
       "url": "desktopwallpapers.org.ua/mini/201505/39933.jpg",
       "name": "INFINITI",
+      "id": 2,
       "description": "Lorem ipsum dolor sit amet",
-      "id": 2
+      "date": 1421153200637
     },
     {
       "url": "desktopwallpapers.org.ua/mini/201510/41430.jpg",
@@ -36,7 +37,7 @@
     },
     {
       "url": "desktopwallpapers.org.ua/mini/201212/21975.jpg",
-      "name": "MERCEDESS ГЕЛИК",
+      "name": "MERCEDESS Гелик",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
       "id": 6
     },
@@ -67,13 +68,6 @@
       "id": 10,
       "description": "Lorem ipsum dolor sit amet",
       "date": 1322159200637
-    },
-    {
-      "url": "https://bipbap.ru/wp-content/uploads/2017/09/1164905.jpg",
-      "name": "sdfsdfsdf",
-      "description": "sdfsdfsdf",
-      "date": 1551317587534,
-      "id": 11
     }
   ],
   "user": {
