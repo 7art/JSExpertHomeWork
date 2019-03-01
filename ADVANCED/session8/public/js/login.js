@@ -1,6 +1,6 @@
 class LoginForm {
 	constructor(validatorModule, galleryModule, userPageModule) {
-		
+
 		this.loginBtn = document.querySelector("#login-btn");
 		this.exitBtn = document.querySelector("#exit-btn");
 		this.userInfoDiv = document.querySelector("#userInfo");
@@ -16,7 +16,7 @@ class LoginForm {
 		this.selectedMenuItem = null;
 		this.login = validatorModule.inpEmail;
 		this.password = validatorModule.inpPassword;
-		
+
 
 		this.loginUrl = "http://localhost:3000/login";
 	}
@@ -67,30 +67,28 @@ class LoginForm {
 			this.targetHandler();
 		}
 	};
-	initValidator() {
+	async initValidator() {
 		if (this.validator.checkFields()) {
 			let userData = {
 				login: this.login.value,
 				password: this.password.value
 			};
-			fetch(this.loginUrl, {
-					method: 'POST',
-					headers: {
-						'Accept': 'application/json',
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify(userData)
-				}).then(responce => responce.json())
-				.then((data) => {
-					//console.log(data);
-					if (data.status == true) {
-						this.userPage.setUserIsAutorized();
-						this.showTopMenu();
-						this.targetHandler();
-					} else {
-						validatorModule.showMessage(["Введен неверный  логин или пароль!"]);
-					}
-				});
+			const response = await fetch(this.loginUrl, {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(userData)
+			});
+			const data = await response.json();
+			if (data.status === true) {
+				this.userPage.setUserIsAutorized();
+				this.showTopMenu();
+				this.targetHandler();
+			} else {
+				validatorModule.showMessage(["Введен неверный  логин или пароль!"]);
+			}
 		} else {
 			this.validator.showMessage(this.validator.errorMessArr);
 		}
@@ -110,7 +108,7 @@ class LoginForm {
 				break;
 			case "aboutuser":
 				this.showSelectedBlock(this.userInfoDiv);
-				this.userPage.setUserData(this.login.value, this.password.value);				
+				this.userPage.setUserData(this.login.value, this.password.value);
 				break;
 		}
 	};

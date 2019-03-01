@@ -86,10 +86,16 @@ class ExtendedGallery extends BaseGallery {
 	}
 	viewEmptyForm() {
 		loginForm.showSelectedBlock(loginForm.viewItemDiv);
-		this.viewItemBtn.setAttribute("data-assignment", "save-new");		
+		this.viewItemBtn.setAttribute("data-assignment", "save-new");
 		this.formTitle.innerHTML = "Добавить новый элемент";
 	};
-	saveNewItem() {
+	async saveNewItem() {
+		await this.saveNewItemComp();
+		loginForm.showSelectedBlock(loginForm.galleryDiv);
+		this.clearForm();
+		super.initGallery();
+	};
+	async saveNewItemComp() {
 		let name = this.name.value;
 		let description = this.description.value;
 		let imgUrl = this.imgUrl.value;
@@ -102,48 +108,46 @@ class ExtendedGallery extends BaseGallery {
 				description: description,
 				date: newdate.getTime()
 			}
-			fetch(this.carsUrl, {
-					method: 'POST',
-					headers: {
-						'Accept': 'application/json',
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify(newItem)
-				}).then(responce => responce.json())
-				.then(() => {
-					loginForm.showSelectedBlock(loginForm.galleryDiv);
-					this.clearForm();
-					super.initGallery();
-				});
+
+			const response = await fetch(this.carsUrl, {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(newItem)
+			});
+			return response.json();
 		} else {
 			validatorModule.showMessage(["Все поля обязательны для заполнения!"]);
 		}
 	};
-	removeItem(e) {
+	async removeItem(e) {
 		const movedItemId = +e.target.getAttribute("data-id");
-		if (movedItemId) {
-			fetch(`${this.carsUrl}/${movedItemId}`, {
-					method: 'delete'
-				}).then(responce => responce.json())
-				.then(() => {
-					super.initGallery();
-				});
+		const response = await fetch(`${this.carsUrl}/${movedItemId}`, {
+			method: 'delete'
+		});
+		//const data = await response.json();
+		if (response.status == "200") {
+			return super.initGallery();
 		}
 	};
-	viewItem(e) {
+	async viewItemComp(e) {
 		const editItemId = +e.target.getAttribute("data-id");
-		fetch(this.carsUrl + "/" + editItemId).then(responce => responce.json())
-			.then(data => {
-				loginForm.showSelectedBlock(loginForm.viewItemDiv);
-				this.name.value = data.name;
-				this.description.value = data.description;
-				this.imgUrl.value = data.url;
-				this.viewItemBtn.setAttribute("data-assignment", "edit-item");
-				this.viewItemBtn.setAttribute("data-id", data.id);
-				this.formTitle.innerHTML = "Редактировать элемент";
-			});
+		const response = await fetch(this.carsUrl + "/" + editItemId);
+		return response.json();
 	};
-	saveEditedItem(e) {
+	async viewItem(e) {
+		const data = await this.viewItemComp(e);
+		loginForm.showSelectedBlock(loginForm.viewItemDiv);
+		this.name.value = data.name;
+		this.description.value = data.description;
+		this.imgUrl.value = data.url;
+		this.viewItemBtn.setAttribute("data-assignment", "edit-item");
+		this.viewItemBtn.setAttribute("data-id", data.id);
+		this.formTitle.innerHTML = "Редактировать элемент";
+	};
+	async saveEditedItemComp(e) {
 		let name = this.name.value;
 		let description = this.description.value;
 		let imgUrl = this.imgUrl.value;
@@ -154,24 +158,27 @@ class ExtendedGallery extends BaseGallery {
 				description: description
 			}
 			const editItemId = +e.target.getAttribute("data-id");
-			fetch(this.carsUrl + "/" + editItemId, {
-					method: 'PUT',
-					headers: {
-						'Accept': 'application/json',
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify(editItem)
-				}).then(responce => responce.json())
-				.then(() => {
-					loginForm.showSelectedBlock(loginForm.galleryDiv);
-					this.clearForm();
-					super.initGallery();
-					validatorModule.showMessage(["Изменения сохранены!"]);
-				});
+			const response = await fetch(this.carsUrl + "/" + editItemId, {
+				method: 'PUT',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(editItem)
+			});
+			return response.json();
 		} else {
 			validatorModule.showMessage(["Все поля обязательны для заполнения!"]);
 		}
 	};
+	async saveEditedItem(e) {
+		await this.saveEditedItemComp(e);
+		loginForm.showSelectedBlock(loginForm.galleryDiv);
+		this.clearForm();
+		super.initGallery();
+		validatorModule.showMessage(["Изменения сохранены!"]);
+	};
+	
 	clearForm() {
 		this.name.value = "";
 		this.description.value = "";
