@@ -5,10 +5,8 @@ class LoginForm {
 		this.exitBtn = document.querySelector("#exit-btn");
 		this.userInfoDiv = document.querySelector("#userInfo");
 		this.galleryDiv = document.querySelector("#gallery");
-		this.loginFormDiv = document.querySelector("#loginform");
-		this.viewItemDiv = document.querySelector("#viewitem");
-		this.topMenu = document.querySelector(".nav-pills");
-		this.hidePassBtn = document.querySelector(".input-group-addon");
+		this.loginFormDiv = document.querySelector("#loginform");		
+		this.topMenu = document.querySelector(".nav-pills");		
 		this.validator = validatorModule;
 		this.gallery = galleryModule;
 		this.userPage = userPageModule;
@@ -17,52 +15,30 @@ class LoginForm {
 		this.login = validatorModule.inpEmail;
 		this.password = validatorModule.inpPassword;
 
-
 		this.loginUrl = "http://localhost:3000/login";
+
+		this.initEventOnce = true;
+		if (this.initEventOnce) {			
+			this.initEvant();
+			this.initEventOnce = !this.initEventOnce;
+		}
 	}
 	initEvant() {
 		this.loginBtn.addEventListener("click", () => {
 			this.initValidator();
-		});
-		this.hidePassBtn.addEventListener("click", () => {
-			this.userPage.showHidePassword();
 		});
 		this.topMenu.addEventListener("click", (e) => {
 			this.showActiveMenuItem(e.target);
 			let target = e.target.getAttribute("data-name");
 			this.targetHandler(target);
 		});
-		this.gallery.addItemBtn.addEventListener("click", (e) => {
-			this.gallery.viewEmptyForm(e);
-		});
-		this.gallery.mainDiv.addEventListener("click", (e) => {
-			if (e.target.getAttribute("data-open-item")) {
-				this.gallery.viewItem(e);
-			} else if (e.target.getAttribute("data-remove-item")) {
-				this.gallery.removeItem(e);
-			}
-		});
-		this.viewItemDiv.addEventListener("click", (e) => {
-			let assignment = e.target.dataset.assignment;
-			if (assignment == "save-new") {
-				this.gallery.saveNewItem();
-			} else if (assignment == "edit-item") {
-				this.gallery.saveEditedItem(e);
-			}
-		});
-		this.gallery.sortTypeByName.addEventListener("click", (e) => {
-			this.gallery.sortingHandler(e);
-		});
-		this.gallery.sortTypeByDate.addEventListener("click", (e) => {
-			this.gallery.sortingHandler(e);
-		});
 	};
 	initComponent() {
 		if (!this.isUserAutorized()) {
-			this.initEvant();
+			//this.initEvant();
 			this.showSelectedBlock(this.loginFormDiv);
 		} else {
-			this.initEvant();
+			//this.initEvant();
 			this.showTopMenu();
 			this.targetHandler();
 		}
@@ -139,6 +115,7 @@ class LoginForm {
 		return !!localStorage.getItem("autorizedID");
 	};
 	showGallery() {
+		this.gallery.clearForm();
 		this.gallery.initGallery();
 	}
 

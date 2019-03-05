@@ -3,8 +3,21 @@ class UserPage {
 		this.outEmail = document.querySelector("#outEmail");
 		this.outPassword = document.querySelector("#outPassword");
 		this.hidePass = document.querySelector(".fa");
+		this.hidePassBtn = document.querySelector("#switcheye");
+		this.initEventOnce = true;
+		if (this.initEventOnce) {
+			console.log(this.initEventOnce);
+			this.userPageEventHendlers();
+			this.initEventOnce = !this.initEventOnce;
+		}
 	}
-
+	userPageEventHendlers() {
+		//console.log("this.initEventOnce");
+		this.hidePassBtn.addEventListener("click", () => {
+			this.showHidePassword();
+		});
+	};
+	
 	showHidePassword() {
 		if (this.outPassword.type === "text") {
 			this.outPassword.type = "password";
@@ -56,5 +69,5 @@ const utilite = {
 	switchCssClass: function (node, removeClass, addClass) {
 		node.classList.remove(removeClass);
 		node.classList.add(addClass);
-	}	
+	}
 }

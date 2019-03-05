@@ -7,6 +7,7 @@ class BaseGallery {
 		this.saveBtn = document.querySelector("#save-new-item");
 		this.editBtn = document.querySelector("#save-edited-item");
 		this.viewItemBtn = document.querySelector(".assignmentbtn");
+		this.viewItemDiv = document.querySelector("#viewitem");
 		this.formTitle = document.querySelector("#formtitle");
 		this.galleryData = null;
 		this.carsUrl = "http://localhost:3000/cars";
@@ -83,9 +84,43 @@ class ExtendedGallery extends BaseGallery {
 		this.name = document.getElementById('newname');
 		this.description = document.getElementById('newdescript');
 		this.imgUrl = document.getElementById('newimgurl');
+		this.initEventOnce = true;
+		if (this.initEventOnce) {
+			console.log(this.initEventOnce);
+			this.galleryEventHandlers();
+			this.initEventOnce = !this.initEventOnce;
+		}
+
 	}
+	galleryEventHandlers() {
+		console.log("initEvantOnce");
+		this.addItemBtn.addEventListener("click", (e) => {
+			this.viewEmptyForm(e);
+		});
+		this.mainDiv.addEventListener("click", (e) => {
+			if (e.target.getAttribute("data-open-item")) {
+				this.viewItem(e);
+			} else if (e.target.getAttribute("data-remove-item")) {
+				this.removeItem(e);
+			}
+		});
+		this.viewItemDiv.addEventListener("click", (e) => {
+			let assignment = e.target.dataset.assignment;
+			if (assignment == "save-new") {
+				this.saveNewItem();
+			} else if (assignment == "edit-item") {
+				this.saveEditedItem(e);
+			}
+		});
+		this.sortTypeByName.addEventListener("click", (e) => {
+			this.sortingHandler(e);
+		});
+		this.sortTypeByDate.addEventListener("click", (e) => {
+			this.sortingHandler(e);
+		});
+	};
 	viewEmptyForm() {
-		loginForm.showSelectedBlock(loginForm.viewItemDiv);
+		loginForm.showSelectedBlock(this.viewItemDiv);
 		this.viewItemBtn.setAttribute("data-assignment", "save-new");
 		this.formTitle.innerHTML = "Добавить новый элемент";
 	};
@@ -138,7 +173,7 @@ class ExtendedGallery extends BaseGallery {
 	};
 	async viewItem(e) {
 		const data = await this.viewItemComp(e);
-		loginForm.showSelectedBlock(loginForm.viewItemDiv);
+		loginForm.showSelectedBlock(this.viewItemDiv);
 		this.name.value = data.name;
 		this.description.value = data.description;
 		this.imgUrl.value = data.url;
