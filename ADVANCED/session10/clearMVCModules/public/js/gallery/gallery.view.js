@@ -7,7 +7,8 @@ export default class GalleryView {
         this.saveBtn = document.querySelector("#save-new-item");
         this.editBtn = document.querySelector("#save-edited-item");
         this.viewItemBtn = document.querySelector(".assignmentbtn");
-        this.viewItemDiv = document.querySelector("#edit-item-view");
+        // this.viewItemDiv = document.querySelector("#edit-item-view");
+        this.viewItemDiv = document.querySelector(".modal-edit-item");
         this.formTitle = document.querySelector("#formtitle");
         this.topMenu = document.querySelector("#topmenu");
         this.galleryData = null;

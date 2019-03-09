@@ -56,18 +56,5 @@ export default class Utils {
     static navigateTo(routeName) {
         window.location.hash = "#" + routeName;
     }
-    // addClassActive(menuSelector, activeItem) {
-    //     console.log(menuSelector + "--" + activeItem);
-    //     let elems = menuSelector.querySelectorAll(".btn");
-    //     [].forEach.call(elems, function (el) {
-    //         el.classList.remove("active");
-    //     });
-    //     menuSelector.querySelector(activeItem).classList.add('active');
-    // }
-    static isEmptyObj(obj) {
-        for (var x in obj) {
-            return false;
-        }
-        return true;
-    }
+
 }

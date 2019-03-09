@@ -118,18 +118,47 @@
             </div>
           </div>
         </div>
-        <!-- </main> -->
-        <!-- <div class="col-md-12 py-5">
-          <div class="text-center">
-            <div class="alert alert-success" role="alert">
-              This is Main Route
-            </div>
-            <button id="saveBtn" class="btn btn-primary my-2">Сохранить</button>
-            <button id="refreshBtn" class="btn btn-success my-2">Обновить</button>
-          </div>
-        </div> -->
       </div>
 
+
+
+      <!-- Modal -->
+      <div class="modal fade modal-edit-item" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="formtitle">Добавить новый элемент</h5>
+              <!-- <h1 class="jumbotron-heading" id="formtitle">Добавить новый элемент</h1> -->
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col">
+                  <form class="form-newimg">
+                    <label class="pt-2">Ссылка на картинку</label>
+                    <input type="text" class="form-control" id="newimgurl" placeholder="http://" required="" autofocus=""
+                      autocomplete="off">
+                    <label class="pt-2">Название</label>
+                    <input type="text" class="form-control" id="newname" placeholder="" required="" autofocus=""
+                      autocomplete="off">
+                    <label class="pt-2">Описание</label>
+                    <textarea class="form-control" id="newdescript" rows="3" name="newdescript" required="" autofocus=""
+                      autocomplete="off"></textarea>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Выйти</button>
+              <button type="button" class="btn btn-primary assignmentbtn" data-assignment="save-new">Сохранить</button>
+              <!-- <button type="button" class="btn btn-lg btn-primary btn-block mt-5 mb-3 assignmentbtn" data-assignment="save-new">Сохранить</button> -->
+            </div>
+          </div>
+        </div>
+      </div>
 
 
 
@@ -169,7 +198,6 @@
 
 
       <div id="info-view" class="hide row">
-        <!-- <main class="text-center d-none" role="main" id="userInfo"> -->
         <section class="jumbotron text-center">
           <div class="container">
             <div class="row">
@@ -199,7 +227,6 @@
             </div>
           </div>
         </section>
-        <!-- </main> -->
       </div>
 
 

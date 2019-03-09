@@ -9,13 +9,15 @@ export default class GalleryController {
 
     bindEvents() {
         this.view.addItemBtn.addEventListener("click", (e) => {
-            this.utils.showView(this.view.edit);
-            this.utils.hideAllView([this.view.main]);
+           // this.utils.showView(this.view.edit);
+           // this.utils.hideAllView([this.view.main]);
             // this.view.clearForm();
+            $(".modal-edit-item").modal("show");
             this.view.viewEmptyForm(e);
         });
         this.view.mainDiv.addEventListener("click", (e) => {
             if (e.target.getAttribute("data-open-item")) {
+                $(".modal-edit-item").modal("show");
                 this.viewItem(e);
             } else if (e.target.getAttribute("data-remove-item")) {
                 this.removeItem(e);
@@ -94,8 +96,8 @@ export default class GalleryController {
     }
     async viewItem(e) {
         const data = await this.viewItemComp(e);
-        this.utils.showView(this.view.edit);
-        this.utils.hideAllView([this.view.main]);
+       // this.utils.showView(this.view.edit);
+        //this.utils.hideAllView([this.view.main]);
         this.view.clearForm();
         this.view.name.value = data.name;
         this.view.description.value = data.description;
@@ -138,7 +140,7 @@ export default class GalleryController {
     showGallery() {
         this.model.initGallery().then((data) => {                  
             this.view.buildGallery(data);
-            this.view.clearForm();
+            //this.view.clearForm();
             this.model.galleryData = data;
         });
     }
