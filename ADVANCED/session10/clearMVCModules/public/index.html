@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <title>MVC Pattern</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+    <h5 class="my-0 mr-md-auto font-weight-normal">JSExpert</h5>
+    <ul id="topmenu" class="nav nav-pills my-2 my-md-0 mr-md-3 d-none">
+      <li class="nav-item pr-3">
+        <a class="btn btn-outline-primary" href="#gallery" data-name="gallery">Галлерея</a>
+      </li>
+      <li class="nav-item pr-3">
+        <a class="btn btn-outline-primary" href="#info" data-name="aboutuser">О пользователе</a>
+      </li>
+      <li class="nav-item pr-3">
+        <a class="btn btn-outline-primary active" href="#" data-name="exit" id="exit-btn">Выход</a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+    <h5 class="my-0 mr-md-auto font-weight-normal">JSExpert</h5>
+    <nav class="my-2 my-md-0 mr-md-3 ">
+      <a class="p-2 text-dark" href="#">Главная</a>
+      <a class="p-2 text-dark" href="#gallery">Галлерея</a>
+      <a class="p-2 text-dark" href="#info">О пользователе</a>
+    </nav>
+    <a class="btn btn-outline-primary" href="#">Войти</a>
+  </div> -->
+  <main role="main">
+
+    <div class="container">
+
+      <div id="login-view" class="hide row">
+        <div class="col-md-12 py-5">
+          <div class="text-center">
+            <!-- <div class="alert alert-secondary" role="alert">
+              This is Login Route
+            </div> -->
+            <form class="form-signin">
+              <h1 class="h3 mb-3 font-weight-normal">Пожалуйста войдите</h1>
+              <label for="inputEmail" class="sr-only">Email</label>
+              <input type="text" id="inputEmail" class="form-control" value="admin@site.com" placeholder="Email address"
+                required="" autofocus="" autocomplete="off">
+              <div class="mb-3"></div>
+              <label for="inputPassword" class="sr-only">Пароль</label>
+              <input type="text" id="inputPassword" class="form-control" value="admin12345" placeholder="Password"
+                required="" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;"
+                autocomplete="off">
+              <div class="mb-3"></div>
+              <div class="btn btn-lg btn-primary btn-block" id="login-btn">Войти</div>
+              <p class="mt-5 mb-3 text-muted">© 2019</p>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div id="gallery-view" class="hide row">
+        <!-- <main class="text-center d-none" role="main" id="gallery"> -->
+        <section class="jumbotron text-center">
+          <div class="container">
+            <h1 class="jumbotron-heading">Автомобильная галлерея</h1>
+            <p class="lead text-muted">На этой странице вы можете увидеть отличную галлерею, которая дает вам
+              возможность
+              ознакомится с нашим каталогом транспортных средств. </p>
+            <div class="row" id="filter">
+              <div class="col-md-6">
+
+                <div class="btn-group" id="dropdown-name">
+                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    Фильтровать по имени
+                  </button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" data-type="0" href="#">Вперед: от А до Я</a>
+                    <a class="dropdown-item" data-type="1" href="#">Назад: от Я до А</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-5">
+                <div class="btn-group" id="dropdown-date">
+                  <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    Фильтровать по дате
+                  </button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" data-type="2" href="#">Сначала новые</a>
+                    <a class="dropdown-item" data-type="3" href="#">Сначала старые</a>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </section>
+
+        <div></div>
+
+        <div class="album py-5 bg-light">
+          <div class="container">
+            <div class="row text-center" id="mainGallery"></div>
+            <div class="text-center pt-3">
+              <button type="button" id="add-item-btn" class="btn btn-primary my-2">Добавить картинку</button>
+            </div>
+          </div>
+        </div>
+        <!-- </main> -->
+        <!-- <div class="col-md-12 py-5">
+          <div class="text-center">
+            <div class="alert alert-success" role="alert">
+              This is Main Route
+            </div>
+            <button id="saveBtn" class="btn btn-primary my-2">Сохранить</button>
+            <button id="refreshBtn" class="btn btn-success my-2">Обновить</button>
+          </div>
+        </div> -->
+      </div>
+
+
+
+
+      <div id="edit-item-view" class="hide row">
+        <section class="jumbotron text-center">
+          <div class="container">
+            <div class="row">
+              <div class="col text-center">
+                <h1 class="jumbotron-heading" id="formtitle">Добавить новый элемент</h1>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <form class="form-newimg">
+                  <label class="pt-2">Ссылка на картинку</label>
+                  <input type="text" class="form-control" id="newimgurl" placeholder="http://" required="" autofocus=""
+                    autocomplete="off">
+                  <label class="pt-2">Название</label>
+                  <input type="text" class="form-control" id="newname" placeholder="" required="" autofocus=""
+                    autocomplete="off">
+                  <label class="pt-2">Описание</label>
+                  <textarea class="form-control" id="newdescript" rows="3" name="newdescript" required="" autofocus=""
+                    autocomplete="off"></textarea>
+                </form>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <button type="button" class="btn btn-lg btn-primary btn-block mt-5 mb-3 assignmentbtn" data-assignment="save-new">Сохранить</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+
+
+
+      <div id="info-view" class="hide row">
+        <!-- <main class="text-center d-none" role="main" id="userInfo"> -->
+        <section class="jumbotron text-center">
+          <div class="container">
+            <div class="row">
+              <div class="col text-left">
+                <h1 class="jumbotron-heading">Информация о пользователе</h1>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <label for="localStorageEmail">Email address</label>
+                <input type="email" class="form-control" id="outEmail" aria-describedby="emailHelp" placeholder="Email">
+                <div class="form-group">
+                  <label>Password</label>
+                  <div class="input-group" id="show_hide_password">
+                    <input class="form-control" id="outPassword" type="text" placeholder="Password">
+                    <div class="input-group-addon">
+                      <i class="fa fa-eye" aria-hidden="true" id="switcheye"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="btn btn-lg btn-primary btn-block mt-5 mb-3 d-none" id="moveback">Вернуться назад</div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- </main> -->
+      </div>
+
+
+      <div class="modal fade bd-modal-sm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+          <div class="alert alert-danger alert-dismissable" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="alerts">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+  <script type="module" src="js/utils.js"></script>
+  <script type="module" src="js/router.js"></script>
+  <script type="module" src="js/gallery/observer.js"></script>
+  <script type="module" src="js/gallery/gallery.model.js"></script>
+  <script type="module" src="js/gallery/gallery.view.js"></script>
+  <script type="module" src="js/gallery/gallery.controller.js"></script>
+  <script type="module" src="js/login/login.model.js"></script>
+  <script type="module" src="js/login/login.view.js"></script>
+  <script type="module" src="js/login/login.controller.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+
+</html>
