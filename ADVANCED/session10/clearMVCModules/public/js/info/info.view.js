@@ -5,6 +5,7 @@ export default class InfoView {
         this.outPassword = document.querySelector("#outPassword");
         this.inpEmail = document.querySelector("#inputEmail");
         this.inpPassword = document.querySelector("#inputPassword");
+        this.topMenu = document.querySelector("#topmenu");
         this.hidePass = document.querySelector(".fa");
     }
 

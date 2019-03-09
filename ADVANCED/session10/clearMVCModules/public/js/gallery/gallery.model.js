@@ -7,12 +7,9 @@ export default class GalleryModel {
 
     initGallery() {
         return fetch(this.carsUrl).then(responce => responce.json())
-            .then(data => {
-                // console.log(this.prepareData(data));
-                let galleryData = this.prepareData(data); //this.prepareData(data);
-                //  console.log(galleryData);
-                return galleryData;
-                //  return galleryData;
+            .then(data => {               
+                let galleryData = this.prepareData(data);                
+                return galleryData;              
             });
     }
     prepareData(data) {
@@ -28,7 +25,7 @@ export default class GalleryModel {
     }
 
     sortData(data, value) {
-        console.log(data);
+        //console.log(data);
         data = data.sort((a, b) => a.name.localeCompare(b.name));
         switch (+value) {
             case 1:

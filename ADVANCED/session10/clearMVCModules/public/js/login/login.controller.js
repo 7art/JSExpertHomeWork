@@ -7,8 +7,7 @@ export default class LoginController {
         this.initEvents();
     }
 
-    initEvents() {
-        // console.log("loginEvant");
+    initEvents() {        
         this.view.loginBtn.addEventListener("click", () => {
             this.authorizeUser();
         });
@@ -17,8 +16,7 @@ export default class LoginController {
         });
     }
 
-    logoutUser() {
-        // console.log("logout");
+    logoutUser() {        
         this.model.clearLocalStorageData();
         this.utils.hideTopMenu(this.view.topMenu);
         this.utils.navigateTo("");
@@ -38,8 +36,6 @@ export default class LoginController {
             const data = await response.json();
             if (data.status === true) {
                 this.model.setUserIsAutorized();
-                this.utils.showTopMenu(this.view.topMenu);
-                this.utils.addClassActive(this.view.topMenu, 'a[data-name=gallery]');
                 this.utils.navigateTo("gallery");               
             } else {
                 this.utils.showMessage(["Введен неверный  логин или пароль!"]);

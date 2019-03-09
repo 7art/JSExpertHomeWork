@@ -12,7 +12,7 @@ export default class InfoController {
     };
 
     init() {
-        this.bindEvents(); 
+        this.bindEvents();       
         this.view.setUserData();             
     }
 

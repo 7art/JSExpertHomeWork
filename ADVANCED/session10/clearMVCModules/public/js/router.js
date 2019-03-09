@@ -25,6 +25,7 @@ let routeConfig = {
         show: () => {
             utils.showView(login);
             utils.hideAllView([main, info, edit]);
+            utils.hideTopMenu(topMenu); 
         },
         init: () => {
             let model = new LoginModel;
@@ -35,7 +36,9 @@ let routeConfig = {
     "gallery": {
         show: () => {
             utils.showView(main);
-            utils.hideAllView([login, info, edit]);          
+            utils.hideAllView([login, info, edit]);   
+            utils.showTopMenu(topMenu, 'a[data-name=gallery]');
+           // utils.addClassActive(topMenu, 'a[data-name=gallery]');         
         },
         init: () => {
             let observer = new Observer;
@@ -47,7 +50,9 @@ let routeConfig = {
     "info": {
         show: () => {
             utils.showView(info);
-            utils.hideAllView([main, login, edit]);           
+            utils.hideAllView([main, login, edit]); 
+            utils.showTopMenu(topMenu, 'a[data-name=aboutuser]');  
+           // utils.addClassActive(topMenu, 'a[data-name=aboutuser]');         
         },
         init: () => {
             let model = new InfoModel;
@@ -61,10 +66,10 @@ let routeConfig = {
 export function updateRoute() {   
     let routeName = '';
     if (utils.isUserAutorized()) {
-        utils.showTopMenu(topMenu);
+       // utils.showTopMenu(topMenu);
         routeName = document.location.hash.replace(/^#/, '');
     }
-    if (activatedRoutes[routeName]) {
+    if (activatedRoutes[routeName]) {        
         activatedRoutes[routeName]();
     } else {
         let route = routeConfig[routeName];
@@ -96,4 +101,4 @@ export function updateRoute() {
 //     }
 //     // }
 // }
-console.log(activatedRoutes);
+//console.log(activatedRoutes);

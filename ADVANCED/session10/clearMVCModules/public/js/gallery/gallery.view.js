@@ -9,14 +9,16 @@ export default class GalleryView {
         this.viewItemBtn = document.querySelector(".assignmentbtn");
         this.viewItemDiv = document.querySelector("#edit-item-view");
         this.formTitle = document.querySelector("#formtitle");
+        this.topMenu = document.querySelector("#topmenu");
         this.galleryData = null;
         this.name = document.getElementById('newname');
         this.description = document.getElementById('newdescript');
         this.imgUrl = document.getElementById('newimgurl');
-        this.initEventOnce = true;
+        
 
         this.main = document.querySelector("#gallery-view");
         this.edit = document.querySelector("#edit-item-view");
+        // this.initEventOnce = true;
         // if (this.initEventOnce) {
         //     console.log(this.initEventOnce);
         //     this.galleryEventHandlers();
@@ -24,23 +26,14 @@ export default class GalleryView {
         // }
 
     }
-    setToggleButton(array) {
-        if (this.galleryData.length === array.length) {
-            this.addItemBtn.setAttribute("disabled", "");
-        } else {
-            this.addItemBtn.removeAttribute("disabled");
-        }
-    };
 
     getSortingType(event) {
         event.preventDefault();
         event.currentTarget.querySelector("button").innerHTML = event.target.innerText;
-        let sortType = event.target.getAttribute("data-type");
-        return sortType;
+        return event.target.getAttribute("data-type");
     }
 
-    buildGallery(array) {
-       // console.log(array);
+    buildGallery(array) {        
         let resultHtml = "";
         array.forEach((item) => {
             resultHtml += `<div class="col-md-4">
@@ -65,39 +58,8 @@ export default class GalleryView {
         this.mainDiv.innerHTML = resultHtml;
     };
 
-    //this.model.formatDate(item.date)
-
-
-    // galleryEventHandlers() {
-    //     console.log("initEvantOnce");
-    //     this.addItemBtn.addEventListener("click", (e) => {
-    //         this.viewEmptyForm(e);
-    //     });
-    //     this.mainDiv.addEventListener("click", (e) => {
-    //         if (e.target.getAttribute("data-open-item")) {
-    //             this.viewItem(e);
-    //         } else if (e.target.getAttribute("data-remove-item")) {
-    //             this.removeItem(e);
-    //         }
-    //     });
-    //     this.viewItemDiv.addEventListener("click", (e) => {
-    //         let assignment = e.target.dataset.assignment;
-    //         if (assignment == "save-new") {
-    //             this.saveNewItem();
-    //         } else if (assignment == "edit-item") {
-    //             this.saveEditedItem(e);
-    //         }
-    //     });
-    //     this.sortTypeByName.addEventListener("click", (e) => {
-    //         this.sortingHandler(e);
-    //     });
-    //     this.sortTypeByDate.addEventListener("click", (e) => {
-    //         this.sortingHandler(e);
-    //     });
-    // };
-
     viewEmptyForm() {
-        // loginForm.showSelectedBlock(this.viewItemDiv);
+        this.clearForm();
         this.viewItemBtn.setAttribute("data-assignment", "save-new");
         this.formTitle.innerHTML = "Добавить новый элемент";
     };

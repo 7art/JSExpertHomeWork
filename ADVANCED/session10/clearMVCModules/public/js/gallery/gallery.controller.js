@@ -11,6 +11,7 @@ export default class GalleryController {
         this.view.addItemBtn.addEventListener("click", (e) => {
             this.utils.showView(this.view.edit);
             this.utils.hideAllView([this.view.main]);
+            // this.view.clearForm();
             this.view.viewEmptyForm(e);
         });
         this.view.mainDiv.addEventListener("click", (e) => {
@@ -37,28 +38,22 @@ export default class GalleryController {
     }
     sortingHandler(e) {
         let sortType = this.view.getSortingType(e);
-        this.view.buildGallery(this.model.sortData(this.model.galleryData, sortType));
+        if (sortType) {
+            let sortedItems = this.model.sortData(this.model.galleryData, sortType);
+            this.model.galleryData = sortedItems;
+            this.view.buildGallery(sortedItems);
+        }
     }
-    // sortingHandler(event) {
-    //     event.preventDefault();
-    //     event.currentTarget.querySelector("button").innerHTML = event.target.innerText;
-    //     let sortType = event.target.getAttribute("data-type");
-    //     if (sortType) {
-    //         let sortedGalleryItems = this.model.sortData(this.model.galleryData, sortType);
-    //         this.view.buildGallery(sortedGalleryItems);
-    //     }
-    // }
     async saveNewItem() {
         let name = this.view.name.value;
         let description = this.view.description.value;
         let imgUrl = this.view.imgUrl.value;
         if (name && description && imgUrl) {
             await this.saveNewItemComp(name, description, imgUrl);
-            // loginForm.showSelectedBlock(loginForm.galleryDiv);
             this.utils.showView(this.view.main);
             this.utils.hideAllView([this.view.edit]);
             this.view.clearForm();
-            this.gallery(); // this.view.buildGallery(this.model.galleryData);
+            this.showGallery();
         } else {
             this.utils.showMessage(["Все поля обязательны для заполнения!"]);
         }
@@ -89,7 +84,7 @@ export default class GalleryController {
         });
         //const data = await response.json();
         if (response.status == "200") {
-            return this.gallery(); //this.view.buildGallery(this.model.galleryData);
+            return this.showGallery();
         }
     }
     async viewItemComp(e) {
@@ -99,9 +94,9 @@ export default class GalleryController {
     }
     async viewItem(e) {
         const data = await this.viewItemComp(e);
-        // loginForm.showSelectedBlock(this.viewItemDiv);
         this.utils.showView(this.view.edit);
         this.utils.hideAllView([this.view.main]);
+        this.view.clearForm();
         this.view.name.value = data.name;
         this.view.description.value = data.description;
         this.view.imgUrl.value = data.url;
@@ -117,7 +112,7 @@ export default class GalleryController {
         }
         const editItemId = +e.target.getAttribute("data-id");
         const response = await fetch(`${this.model.carsUrl}/${editItemId}`, {
-            method: 'PUT',
+            method: 'PATCH', //PUT
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -131,11 +126,8 @@ export default class GalleryController {
         let description = this.view.description.value;
         let imgUrl = this.view.imgUrl.value;
         if (name && description && imgUrl) {
-            await this.saveEditedItemComp(e, name, description, imgUrl);
-            //loginForm.showSelectedBlock(loginForm.galleryDiv);
-            //this.clearForm();
-            //this.initGallery();
-            this.gallery();
+            await this.saveEditedItemComp(e, name, description, imgUrl);                    
+            this.showGallery();
             this.utils.showView(this.view.main);
             this.utils.hideAllView([this.view.edit]);
             this.utils.showMessage(["Изменения сохранены!"]);
@@ -143,19 +135,17 @@ export default class GalleryController {
             return this.utils.showMessage(["Все поля обязательны для заполнения!"]);
         }
     }
-    gallery() {
-        this.model.initGallery().then((data) => {
-            //console.log(data);
+    showGallery() {
+        this.model.initGallery().then((data) => {                  
             this.view.buildGallery(data);
+            this.view.clearForm();
             this.model.galleryData = data;
         });
     }
 
     init() {
         this.bindEvents();
-        this.gallery();
-        //this.view.buildGallery();
-        //this.view.buildGallery(this.model.initGallery());
+        this.showGallery();
     }
     // bindEvents() {
     //     this.view.DOMElements.saveBtn.addEventListener("click", () => {
