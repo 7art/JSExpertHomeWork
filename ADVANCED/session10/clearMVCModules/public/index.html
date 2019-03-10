@@ -30,25 +30,12 @@
     </ul>
   </div>
 
-  <!-- <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-    <h5 class="my-0 mr-md-auto font-weight-normal">JSExpert</h5>
-    <nav class="my-2 my-md-0 mr-md-3 ">
-      <a class="p-2 text-dark" href="#">Главная</a>
-      <a class="p-2 text-dark" href="#gallery">Галлерея</a>
-      <a class="p-2 text-dark" href="#info">О пользователе</a>
-    </nav>
-    <a class="btn btn-outline-primary" href="#">Войти</a>
-  </div> -->
   <main role="main">
 
     <div class="container">
-
       <div id="login-view" class="hide row">
         <div class="col-md-12 py-5">
           <div class="text-center">
-            <!-- <div class="alert alert-secondary" role="alert">
-              This is Login Route
-            </div> -->
             <form class="form-signin">
               <h1 class="h3 mb-3 font-weight-normal">Пожалуйста войдите</h1>
               <label for="inputEmail" class="sr-only">Email</label>
@@ -68,7 +55,6 @@
       </div>
 
       <div id="gallery-view" class="hide row">
-        <!-- <main class="text-center d-none" role="main" id="gallery"> -->
         <section class="jumbotron text-center">
           <div class="container">
             <h1 class="jumbotron-heading">Автомобильная галлерея</h1>
@@ -103,7 +89,6 @@
                 </div>
               </div>
 
-
             </div>
           </div>
         </section>
@@ -129,7 +114,6 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="formtitle">Добавить новый элемент</h5>
-              <!-- <h1 class="jumbotron-heading" id="formtitle">Добавить новый элемент</h1> -->
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -147,6 +131,8 @@
                     <label class="pt-2">Описание</label>
                     <textarea class="form-control" id="newdescript" rows="3" name="newdescript" required="" autofocus=""
                       autocomplete="off"></textarea>
+                    <label class="pt-2">Дата</label>
+                    <input type="datetime-local" class="form-control" name="created" id="newdatetime">
                   </form>
                 </div>
               </div>
@@ -154,48 +140,10 @@
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Выйти</button>
               <button type="button" class="btn btn-primary assignmentbtn" data-assignment="save-new">Сохранить</button>
-              <!-- <button type="button" class="btn btn-lg btn-primary btn-block mt-5 mb-3 assignmentbtn" data-assignment="save-new">Сохранить</button> -->
             </div>
           </div>
         </div>
       </div>
-
-
-
-      <div id="edit-item-view" class="hide row">
-        <section class="jumbotron text-center">
-          <div class="container">
-            <div class="row">
-              <div class="col text-center">
-                <h1 class="jumbotron-heading" id="formtitle">Добавить новый элемент</h1>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <form class="form-newimg">
-                  <label class="pt-2">Ссылка на картинку</label>
-                  <input type="text" class="form-control" id="newimgurl" placeholder="http://" required="" autofocus=""
-                    autocomplete="off">
-                  <label class="pt-2">Название</label>
-                  <input type="text" class="form-control" id="newname" placeholder="" required="" autofocus=""
-                    autocomplete="off">
-                  <label class="pt-2">Описание</label>
-                  <textarea class="form-control" id="newdescript" rows="3" name="newdescript" required="" autofocus=""
-                    autocomplete="off"></textarea>
-                </form>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <button type="button" class="btn btn-lg btn-primary btn-block mt-5 mb-3 assignmentbtn" data-assignment="save-new">Сохранить</button>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-
-
-
 
       <div id="info-view" class="hide row">
         <section class="jumbotron text-center">

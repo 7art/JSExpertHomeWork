@@ -18,7 +18,7 @@ export default class LoginController {
 
     logoutUser() {        
         this.model.clearLocalStorageData();
-        this.utils.hideTopMenu(this.view.topMenu);
+        //this.utils.hideTopMenu(this.view.topMenu);
         this.utils.navigateTo("");
     }
 

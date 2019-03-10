@@ -5,11 +5,10 @@ export default class GalleryModel {
         this.galleryData = null;
     }
 
-    initGallery() {
+    initGalleryData() {
         return fetch(this.carsUrl).then(responce => responce.json())
-            .then(data => {               
-                let galleryData = this.prepareData(data);                
-                return galleryData;              
+            .then(data => {
+                return data;
             });
     }
     prepareData(data) {
@@ -19,7 +18,7 @@ export default class GalleryModel {
                 id: item.id,
                 name: this.utils.capitalize(item.name),
                 description: this.utils.cutString(item.description),
-                date: item.date
+                date: this.utils.formatDate(item.date)
             };
         });
     }
@@ -39,46 +38,8 @@ export default class GalleryModel {
                 return data;
         }
     }
-
-
-
-    formatDate(date) {
-        return moment(date).format("YYYY/MM/DD HH:mm");
+    convertDateToUTC(date){
+        let convDateTime = this.utils.formatDateUTC(date);
+        return convDateTime.substr(0,16);
     }
-    // getData() {
-    //     return fetch(this.getUrl).then(responce => responce.json())
-    //     .then(data => {
-    //         console.log("Initial data is loaded");
-    //         return data;
-    //     })         
-    // }
-
-    // saveData(item) {         
-    //     console.log("Saving item... " + item.name);
-    //     let iphone = {
-    //         "name": "Saved iPhone",
-    //         "price": 12458,
-    //         "popular": true,
-    //         "date": 1467440203
-    //     }
-    //     return new Promise(
-    //         function(resolve, reject) {            
-    //             resolve(iphone);          
-    //         }
-    //     );
-    // }
-
-    // updateData(counter) {
-    //     console.log("Updating item... " + counter);
-    //     let samsung = {
-    //         "name": "Saved Samsung",
-    //         "price": 12458,
-    //         "popular": true,
-    //         "date": 1467440203
-    //     }
-    //     return Promise.resolve(samsung);
-    // }
-
-
-
 }

@@ -1,23 +1,22 @@
 export default class GalleryController {
-    constructor(model, view, observer, utils) {
+    constructor(model, view) {
         this.model = model;
-        this.view = view;
-        this.observer = observer;
-        this.utils = utils;
+        this.view = view;       
+        // this.utils = utils;
         this.init();
     }
 
     bindEvents() {
-        this.view.addItemBtn.addEventListener("click", (e) => {
-           // this.utils.showView(this.view.edit);
-           // this.utils.hideAllView([this.view.main]);
-            // this.view.clearForm();
-            $(".modal-edit-item").modal("show");
-            this.view.viewEmptyForm(e);
+        this.view.addItemBtn.addEventListener("click", () => {
+           
+           // $(".modal-edit-item").modal("show");
+            let convDateTime = new Date();
+            convDateTime = this.model.convertDateToUTC(convDateTime);
+            this.view.viewEmptyForm(convDateTime);
         });
         this.view.mainDiv.addEventListener("click", (e) => {
             if (e.target.getAttribute("data-open-item")) {
-                $(".modal-edit-item").modal("show");
+                
                 this.viewItem(e);
             } else if (e.target.getAttribute("data-remove-item")) {
                 this.removeItem(e);
@@ -43,6 +42,7 @@ export default class GalleryController {
         if (sortType) {
             let sortedItems = this.model.sortData(this.model.galleryData, sortType);
             this.model.galleryData = sortedItems;
+            sortedItems = this.model.prepareData(sortedItems);
             this.view.buildGallery(sortedItems);
         }
     }
@@ -50,23 +50,22 @@ export default class GalleryController {
         let name = this.view.name.value;
         let description = this.view.description.value;
         let imgUrl = this.view.imgUrl.value;
+        let dateTime = this.view.dateTime.value;
         if (name && description && imgUrl) {
-            await this.saveNewItemComp(name, description, imgUrl);
-            this.utils.showView(this.view.main);
-            this.utils.hideAllView([this.view.edit]);
+            await this.saveNewItemComp(name, description, imgUrl, dateTime);
             this.view.clearForm();
             this.showGallery();
         } else {
-            this.utils.showMessage(["Все поля обязательны для заполнения!"]);
+            this.model.utils.showMessage(["Все поля обязательны для заполнения!"]);
         }
     }
-    async saveNewItemComp(name, description, imgUrl) {
-        let newdate = new Date();
+    async saveNewItemComp(name, description, imgUrl, dateTime) {
+        let newdate = dateTime ? this.model.utils.formatDateMilisec(dateTime) : new Date().getTime();
         let newItem = {
             url: imgUrl,
             name: name,
             description: description,
-            date: newdate.getTime()
+            date: newdate
         }
 
         const response = await fetch(this.model.carsUrl, {
@@ -96,22 +95,19 @@ export default class GalleryController {
     }
     async viewItem(e) {
         const data = await this.viewItemComp(e);
-       // this.utils.showView(this.view.edit);
-        //this.utils.hideAllView([this.view.main]);
-        this.view.clearForm();
-        this.view.name.value = data.name;
-        this.view.description.value = data.description;
-        this.view.imgUrl.value = data.url;
-        this.view.viewItemBtn.setAttribute("data-assignment", "edit-item");
-        this.view.viewItemBtn.setAttribute("data-id", data.id);
-        this.view.formTitle.innerHTML = "Редактировать элемент";
+        this.view.clearForm();        
+        let convDateTime = this.model.convertDateToUTC(data.date);
+        this.view.viewCompletedForm(data, convDateTime);
+
     }
-    async saveEditedItemComp(e, name, description, imgUrl) {
+    async saveEditedItemComp(e, name, description, imgUrl, dateTime) {
         let editItem = {
             url: imgUrl,
             name: name,
-            description: description
+            description: description,
+            date: this.model.utils.formatDateMilisec(dateTime)
         }
+
         const editItemId = +e.target.getAttribute("data-id");
         const response = await fetch(`${this.model.carsUrl}/${editItemId}`, {
             method: 'PATCH', //PUT
@@ -127,53 +123,26 @@ export default class GalleryController {
         let name = this.view.name.value;
         let description = this.view.description.value;
         let imgUrl = this.view.imgUrl.value;
+        let dateTime = this.view.dateTime.value;
         if (name && description && imgUrl) {
-            await this.saveEditedItemComp(e, name, description, imgUrl);                    
+            await this.saveEditedItemComp(e, name, description, imgUrl, dateTime);
             this.showGallery();
-            this.utils.showView(this.view.main);
-            this.utils.hideAllView([this.view.edit]);
-            this.utils.showMessage(["Изменения сохранены!"]);
+            this.model.utils.showMessage(["Изменения сохранены!"]);
         } else {
-            return this.utils.showMessage(["Все поля обязательны для заполнения!"]);
+            return this.model.utils.showMessage(["Все поля обязательны для заполнения!"]);
         }
     }
     showGallery() {
-        this.model.initGallery().then((data) => {                  
-            this.view.buildGallery(data);
-            //this.view.clearForm();
+        this.model.initGalleryData().then((data) => {
             this.model.galleryData = data;
+            data = this.model.prepareData(data);
+            this.view.buildGallery(data);
+
         });
     }
 
     init() {
         this.bindEvents();
         this.showGallery();
-    }
-    // bindEvents() {
-    //     this.view.DOMElements.saveBtn.addEventListener("click", () => {
-    //         let item = this.view.getItemToSave();
-    //         this.model.saveData(item).then(data => this.view.setSavedData(data));
-    //     });
-    //     this.view.DOMElements.refreshBtn.addEventListener("click", () => {
-    //         let count = this.view.counter++;
-    //         this.observer.callEvent("update", count);
-    //     });
-    // }
-
-    // bindSubscribers() {
-    //     this.observer.subscribeEvent("update", (count) => {
-    //         this.model.updateData(count).then((data) => {
-    //             this.view.setUpdatedData(data);
-    //         });    
-    //     });     
-    // }  
-
-    // init() {
-    //     this.model.getData().then((data) => {
-    //         this.view.init(data)
-    //         this.bindSubscribers();
-    //         this.bindEvents();
-    //     });    
-    // }
-
+    }    
 }
