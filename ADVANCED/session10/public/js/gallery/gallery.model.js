@@ -23,8 +23,7 @@ export default class GalleryModel {
         });
     }
 
-    sortData(data, value) {
-        //console.log(data);
+    sortData(data, value) {        
         data = data.sort((a, b) => a.name.localeCompare(b.name));
         switch (+value) {
             case 1:

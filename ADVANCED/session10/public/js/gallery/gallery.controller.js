@@ -7,16 +7,13 @@ export default class GalleryController {
     }
 
     bindEvents() {
-        this.view.addItemBtn.addEventListener("click", () => {
-           
-           // $(".modal-edit-item").modal("show");
+        this.view.addItemBtn.addEventListener("click", () => {          
             let convDateTime = new Date();
             convDateTime = this.model.convertDateToUTC(convDateTime);
             this.view.viewEmptyForm(convDateTime);
         });
         this.view.mainDiv.addEventListener("click", (e) => {
-            if (e.target.getAttribute("data-open-item")) {
-                
+            if (e.target.getAttribute("data-open-item")) {                
                 this.viewItem(e);
             } else if (e.target.getAttribute("data-remove-item")) {
                 this.removeItem(e);
@@ -137,7 +134,6 @@ export default class GalleryController {
             this.model.galleryData = data;
             data = this.model.prepareData(data);
             this.view.buildGallery(data);
-
         });
     }
 
